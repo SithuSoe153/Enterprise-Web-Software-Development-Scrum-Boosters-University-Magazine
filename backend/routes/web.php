@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +12,18 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\AuthController;
+
+// Route::get('/upload', [ArticleController::class, 'showUploadForm'])->name('upload.form');
+// Route::post('/upload', [ArticleController::class, 'upload'])->name('upload.submit');
+
+
+// Route::get('/download-articles', [ArticleController::class, 'downloadArticlesZip'])->name('articles.download.zip');
+// Route::get('/da', [ArticleController::class, 'downloadArticlesZip'])->name('articles.download.zip');
+
 
 
 Route::middleware('auth-user')->group(function () {
@@ -29,4 +39,13 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'apiLogin']);
 
     Route::post('/register', [AuthController::class, 'store']);
+});
+
+
+Route::get('/upload-success', function () {
+    return view('upload-success');
+})->name('upload.success');
+
+Route::get('/', function () {
+    return view('welcome');
 });

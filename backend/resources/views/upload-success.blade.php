@@ -9,7 +9,7 @@
 
 <body>
     <h1>Article Uploaded Successfully!</h1>
-    <a href="{{ route('upload.form') }}">Upload Another Article</a>
+    <a href="/dashboard">Upload Another Article</a>
 </body>
 
 </html>

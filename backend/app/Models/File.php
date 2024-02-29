@@ -9,10 +9,13 @@ class File extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['article_id', 'file_path'];
+    protected $fillable = ['file_path']; // Add 'file_path' here
 
-    public function article()
-    {
+
+    public function article() {
         return $this->belongsTo(Article::class);
     }
+
+    
+
 }

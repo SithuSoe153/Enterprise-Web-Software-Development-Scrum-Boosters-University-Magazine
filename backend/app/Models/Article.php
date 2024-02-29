@@ -11,9 +11,15 @@ class Article extends Model
 
     protected $fillable = ['magazine_id', 'user_id', 'title', 'description', 'is_selected', 'remarks'];
 
+
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function files()
+    {
+        return $this->hasMany(File::class);
     }
 
     public function magazine()
@@ -21,10 +27,6 @@ class Article extends Model
         return $this->belongsTo(Magazine::class);
     }
 
-    public function files()
-    {
-        return $this->hasMany(File::class);
-    }
 
     public function comments()
     {

@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use ZipArchive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Article;
+use App\Models\File;
+use App\Models\User;
+
 
 class ArticleController extends Controller
 {
-    protected $fillable = ['title', 'user_id', 'file_path'];
+
 
     public function upload(Request $request)
     {
@@ -19,18 +24,18 @@ class ArticleController extends Controller
 
         // Assuming you're manually managing the user authentication for now
         // $userId = 1; // Or however you determine the user's ID
-        // $user = User::find(2);
+        $user = User::find(1);
 
         // Create a unique directory for this specific article upload
-        $uniqueFolder = 'user' . auth()->user()->id . '_' . now()->format('YmdHis');
+        $uniqueFolder = 'user' . $user->id . '_' . now()->format('YmdHis');
         $articleDirectory = 'public/articles/' . $uniqueFolder;
 
         Storage::makeDirectory($articleDirectory);
 
 
-        $article = auth()->user()->articles()->create([
+        $article = $user->articles()->create([
             'magazine_id' => 1,
-            'user_id' => auth()->user()->id,
+            'user_id' => $user->id,
             'title' => $request->title,
             // Include other fields as necessary
         ]);
@@ -52,4 +57,104 @@ class ArticleController extends Controller
 
         return redirect()->route('upload.success'); // Ensure you have this route defined
     }
+    public function showUploadForm()
+    {
+        return view('upload-form');
+    }
+
+    protected $fillable = ['title', 'user_id', 'file_path'];
+    public function downloadArticlesZip()
+    {
+        $zip = new ZipArchive;
+        $zipFileName = 'articles_' . now()->format('YmdHis') . '.zip';
+        $zipPath = storage_path('app/public/' . $zipFileName);
+
+        if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
+            // Retrieve all articles with status 1
+            $articles = Article::where('is_selected', 1)->get();
+
+            foreach ($articles as $article) {
+                $articleFolderPath = storage_path('app/public/articles/user' . $article->user_id . '_' . $article->created_at->format('YmdHis'));
+
+                $files = Storage::files('public/articles/user' . $article->user_id . '_' . $article->created_at->format('YmdHis'));
+
+                foreach ($files as $file) {
+                    // Add files to zip
+                    $relativePath = substr($file, strlen('public/'));
+                    $zip->addFile(storage_path('app/' . $file), $relativePath);
+                }
+            }
+
+            $zip->close();
+
+            // Download ZIP
+            return response()->download($zipPath)->deleteFileAfterSend(true);
+        } else {
+            return redirect()->back()->with('error', 'Cannot create ZIP file.');
+        }
+    }
+
+
+    // public function downloadZip()
+    // {
+    //     // Get all user articles
+    //     $articles = Article::with('files')->get();
+
+    //     // Create a temporary directory to store article files
+    //     $tempDirectory = storage_path('app/temp');
+    //     if (!file_exists($tempDirectory)) {
+    //         mkdir($tempDirectory);
+    //     }
+
+    //     // Loop through articles, copy files to temporary directory
+    //     foreach ($articles as $article) {
+    //         foreach ($article->files as $file) {
+    //             Storage::copy($file->file_path, $tempDirectory . '/' . basename($file->file_path));
+    //         }
+    //     }
+
+    //     // Create ZIP file
+    //     $zipFileName = 'user_articles_' . now()->format('YmdHis') . '.zip';
+    //     $zipFilePath = storage_path('app/public/' . $zipFileName);
+
+    //     $zip = new ZipArchive;
+    //     if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+    //         $files = glob($tempDirectory . '/*');
+    //         foreach ($files as $file) {
+    //             $zip->addFile($file, basename($file));
+    //         }
+    //         $zip->close();
+    //     }
+
+    //     // Delete temporary directory
+    //     $this->deleteDirectory($tempDirectory);
+
+    //     // Download ZIP file
+    //     return response()->download($zipFilePath)->deleteFileAfterSend(true);
+    // }
+
+    // private function deleteDirectory($directory)
+    // {
+    //     if (!file_exists($directory)) {
+    //         return;
+    //     }
+
+    //     $files = array_diff(scandir($directory), ['.', '..']);
+    //     foreach ($files as $file) {
+    //         (is_dir("$directory/$file")) ? $this->deleteDirectory("$directory/$file") : unlink("$directory/$file");
+    //     }
+
+    //     rmdir($directory);
+    // }
 }
+
+
+
+// namespace App\Http\Controllers;
+
+// use Illuminate\Http\Request;
+
+// class ArticleController extends Controller
+// {
+//     //
+// }

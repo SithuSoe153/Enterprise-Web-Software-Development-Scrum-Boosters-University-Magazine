@@ -11,9 +11,10 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath soap \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath soap zip \
     && pecl install xdebug \
     && docker-php-ext-enable xdebug
+
 
 # Install Composer globally
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer

@@ -3,7 +3,7 @@ version: "3"
 services:
   backend:
     build:
-      context: ./laravelArticlesProject
+      context: ./backend
     # image: soe153/projectmanagement-backend:latest
     environment:
       APP_ENV: local
@@ -13,7 +13,7 @@ services:
     ports:
       - "0.0.0.0:8000:8000"
     volumes:
-      - ./laravelArticlesProject:/app
+      - ./backend:/app
       - /app/vendor
 
   mysql:
@@ -22,16 +22,25 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: sithu
       MYSQL_DATABASE: university_magazine
-      MYSQL_USER: sithu
+      MYSQL_USER: root
       MYSQL_PASSWORD: sithu
     ports:
-      - "0.0.0.0:3308:3306"
+      - "0.0.0.0:3307:3306"
+
+  # mysql:
+  #     image: mysql:latest
+  #     restart: always
+  #     environment:
+  #       MYSQL_ROOT_PASSWORD: sithu
+  #       MYSQL_DATABASE: university
+  #     ports:
+  #       - "0.0.0.0:3307:3306"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
       PMA_HOST: mysql
-      PMA_USER: sithu # Update this to match your MySQL user
+      PMA_USER: root # Update this to match your MySQL user
       PMA_PASSWORD: sithu # Update this to match your MySQL password
       PMA_PORT: 3306
     ports:
