@@ -10,6 +10,20 @@
 
 <body>
 
+
+    <?php
+
+    try {
+        DB::connection()->getPdo();
+        echo 'Connected successfully.';
+    } catch (\Exception $e) {
+        die('Could not connect to the database. Error: ' . $e->getMessage());
+    }
+
+    ?>
+
+
+
     {{-- <form action="http://localhost:8000/api/login" method="POST"> --}}
     <form action="/login" method="POST">
         @csrf

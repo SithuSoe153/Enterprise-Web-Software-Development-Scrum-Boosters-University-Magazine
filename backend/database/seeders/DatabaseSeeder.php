@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
     {
 
         // Seed roles
-        $roles = ['Marketing Coordinator', 'Marketing Manager', 'Student', 'Guest'];
+        $roles = ['Admin', 'Marketing Coordinator', 'Marketing Manager', 'Student', 'Guest'];
         foreach ($roles as $role) {
             Role::create(['name' => $role]);
         }
@@ -30,6 +30,13 @@ class DatabaseSeeder extends Seeder
         }
 
         // Seed users and assigned roles
+        // Admin
+        User::create([
+            'name' => 'Admin',
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('kmd123'),
+        ])->roles()->attach(Role::where('name', 'Admin')->first()->id);
+
         // Marketing Manager
         User::create([
             'name' => 'Marketing Manager',

@@ -18,13 +18,12 @@ class ArticleController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'article' => 'required|mimes:doc,docx',
+            'articles.*' => 'required|mimes:doc,docx',
             'images.*' => 'image|mimes:jpg,jpeg,png|max:2048' // Adjust the size as needed
         ]);
 
         // Assuming you're manually managing the user authentication for now
-        // $userId = 1; // Or however you determine the user's ID
-        $user = User::find(1);
+        $user = auth()->user();
 
         // Create a unique directory for this specific article upload
         $uniqueFolder = 'user' . $user->id . '_' . now()->format('YmdHis');
@@ -32,31 +31,142 @@ class ArticleController extends Controller
 
         Storage::makeDirectory($articleDirectory);
 
-
+        // Store the article's Word documents and create the article record
         $article = $user->articles()->create([
             'magazine_id' => 1,
-            'user_id' => $user->id,
             'title' => $request->title,
             // Include other fields as necessary
         ]);
 
-        // Store the article's Word document
-        $articleFilePath = $request->file('article')->store($articleDirectory);
-
-        // Update the article with the file path
-        $article->update(['file_path' => $articleFilePath]);
+        // Store article files (Word documents)
+        if ($request->hasFile('articles')) {
+            foreach ($request->file('articles') as $articleFile) {
+                $articlePath = $articleFile->store($articleDirectory);
+                // Create a record in the files table for each article file
+                $article->files()->create(['file_path' => $articlePath]);
+            }
+        }
 
         // Store article images
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
                 $imagePath = $image->store($articleDirectory);
-                // Assuming you have a method to associate files with the article
+                // Create a record in the files table for each image
                 $article->files()->create(['file_path' => $imagePath]);
             }
         }
 
         return redirect()->route('upload.success'); // Ensure you have this route defined
     }
+
+
+
+    // public function upload(Request $request)
+    // {
+    //     $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'articles.*' => 'required|mimes:doc,docx', // Change 'article' to 'articles.*' to handle multiple files
+    //         'images.*' => 'image|mimes:jpg,jpeg,png|max:2048' // Adjust the size as needed
+    //     ]);
+    //     // dd($request->all());
+    //     // Assuming you're manually managing the user authentication for now
+    //     // $userId = 1; // Or however you determine the user's ID
+    //     $user = auth()->user();
+
+    //     // Create a unique directory for this specific article upload
+    //     $uniqueFolder = 'user' . $user->id . '_' . now()->format('YmdHis');
+    //     $articleDirectory = 'public/articles/' . $uniqueFolder;
+
+    //     Storage::makeDirectory($articleDirectory);
+
+    //     // Check if any article files were uploaded
+    //     if ($request->hasFile('articles')) {
+    //         // Store the article's Word documents and create the articles
+    //         foreach ($request->file('articles') as $articleFile) {
+    //             $articleFilePath = $articleFile->store($articleDirectory);
+
+    //             // Create the article record
+    //             $article = $user->articles()->create([
+    //                 'magazine_id' => 1,
+    //                 'user_id' => $user->id,
+    //                 'title' => $request->title,
+    //                 'file_path' => $articleFilePath, // Update the article with the file path
+    //                 // Include other fields as necessary
+    //             ]);
+
+    //             // Store article images
+    //             if ($request->hasFile('images')) {
+    //                 foreach ($request->file('images') as $image) {
+    //                     $imagePath = $image->store($articleDirectory);
+    //                     // Associate each image with the article
+    //                     $article->files()->create(['file_path' => $imagePath]);
+    //                 }
+    //             }
+    //         }
+    //     } else {
+    //         // Handle case where no article files were uploaded
+    //         // Optionally redirect back with an error message
+    //         return redirect()->back()->withErrors(['articles' => 'Please upload at least one article.']);
+    //     }
+
+    //     return redirect()->route('upload.success'); // Ensure you have this route defined
+    // }
+
+
+    // public function upload(Request $request)
+    // {
+    //     $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'articles.*' => 'required|mimes:doc,docx', // Change 'article' to 'articles.*' to handle multiple files
+    //         'images.*' => 'image|mimes:jpg,jpeg,png|max:2048' // Adjust the size as needed
+    //     ]);
+
+    //     // Assuming you're manually managing the user authentication for now
+    //     // $userId = 1; // Or however you determine the user's ID
+    //     $user = auth()->user();
+
+    //     // Create a unique directory for this specific article upload
+    //     $uniqueFolder = 'user' . $user->id . '_' . now()->format('YmdHis');
+    //     $articleDirectory = 'public/articles/' . $uniqueFolder;
+
+    //     Storage::makeDirectory($articleDirectory);
+
+    //     // Check if any article files were uploaded
+    //     if ($request->hasFile('articles')) {
+    //         foreach ($request->file('articles') as $articleFile) {
+    //             $articleFilePath = $articleFile->store($articleDirectory);
+
+    //             // Create the article record
+    //             $article = $user->articles()->create([
+    //                 'magazine_id' => 1,
+    //                 'user_id' => $user->id,
+    //                 'title' => $request->title,
+    //                 'file_path' => $articleFilePath, // Update the article with the file path
+    //                 // Include other fields as necessary
+    //             ]);
+
+    //             // Store article images
+    //             if ($request->hasFile('images')) {
+    //                 foreach ($request->file('images') as $image) {
+    //                     $imagePath = $image->store($articleDirectory);
+    //                     // Associate each image with the article
+    //                     $article->files()->create(['file_path' => $imagePath]);
+    //                 }
+    //             }
+    //         }
+    //     } else {
+    //         // Handle case where no article files were uploaded
+    //         // Optionally redirect back with an error message
+    //         return redirect()->back()->withErrors(['articles' => 'Please upload at least one article.']);
+    //     }
+
+    //     return redirect()->route('upload.success'); // Ensure you have this route defined
+    // }
+
+
+
+
+
     public function showUploadForm()
     {
         return view('upload-form');

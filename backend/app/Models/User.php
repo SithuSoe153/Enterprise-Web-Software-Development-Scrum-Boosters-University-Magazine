@@ -17,7 +17,6 @@ class User extends Authenticatable
         return $this->hasMany(Article::class);
     }
 
-
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'assigned_roles')->withTimestamps();
@@ -32,6 +31,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class);
     }
+    public function assignedRoles()
+    {
+        return $this->hasMany(AssignedRole::class);
+    }
+
     public function hasRole(array $roleNames): bool
     {
         // Check if the user has any of the specified roles
