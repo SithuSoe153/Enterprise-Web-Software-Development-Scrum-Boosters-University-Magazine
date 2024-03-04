@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -149,8 +151,38 @@
         <hr>
         <h1>Articles</h1>
         @foreach ($articles as $article)
-            <p>{{ $article->title }}</p>
+            <p><input type="checkbox" class="article-checkbox" id="article-{{ $article->id }}"
+                    value="{{ $article->id }}">
+                {{ $article->title }}
+            </p>
         @endforeach
+
+
+        <script>
+            $(document).ready(function() {
+                $('.article-checkbox').change(function() { // Use 'change' instead of 'click' for checkboxes
+                    var articleId = $(this).val();
+                    var isChecked = $(this).is(':checked'); // Get the checked status
+
+                    $.ajax({
+                        url: '/article/toggle-selected/' + articleId,
+                        method: 'POST', // Ensure method is POST
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            is_selected: isChecked // Send the status of the checkbox
+                        },
+                        success: function(response) {
+                            console.log("success", response); // Log success with response data
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error", status, error);
+                        }
+                    });
+                });
+            });
+        </script>
+
+
 
 
         <hr>

@@ -11,7 +11,8 @@ class Magazine extends Model
 
     protected $fillable = ['title', 'description', 'open_date', 'closure_date', 'final_date'];
 
-    public function articles() {
+    public function articles()
+    {
         return $this->hasMany(Article::class);
     }
 }

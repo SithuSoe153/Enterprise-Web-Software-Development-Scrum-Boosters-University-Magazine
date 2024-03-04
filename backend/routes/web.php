@@ -43,6 +43,9 @@ use Illuminate\Support\Facades\DB;
 //     return response()->file($pdfPath);
 // })->name('view.word');
 
+
+Route::post('/article/toggle-selected/{article}', [ArticleController::class, 'toggleSelected'])->name('article.toggleSelected');
+
 Route::get('/test-db', function () {
     // dd(request()->header('User-Agent'));
 
@@ -63,9 +66,9 @@ Route::middleware('auth-user')->group(function () {
     Route::post('/upload', [ArticleController::class, 'upload']);
 });
 
+Route::get('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'apiLogin']);
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthController::class, 'login']);
-    Route::post('/login', [AuthController::class, 'apiLogin']);
 
     Route::post('/register', [AuthController::class, 'store']);
 });

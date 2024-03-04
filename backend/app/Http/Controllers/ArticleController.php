@@ -14,6 +14,18 @@ class ArticleController extends Controller
 {
 
 
+    public function toggleSelected(Article $article, Request $request) // Type-hint the Article model
+    {
+        // No need to find the article, it's already injected by Laravel due to route model binding
+        $isSelected = filter_var($request->is_selected, FILTER_VALIDATE_BOOLEAN); // Ensure boolean value
+
+        $article->is_selected = $isSelected;
+        $article->save();
+
+        return response()->json(['success' => true, 'article' => $article]);
+    }
+
+
     public function upload(Request $request)
     {
         $request->validate([
