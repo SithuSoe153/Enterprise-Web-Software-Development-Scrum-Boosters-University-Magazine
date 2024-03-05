@@ -124,7 +124,7 @@ class AuthController extends Controller
 
         // Load faculties for display
         $faculties = Faculty::all();
-        return view('dashboard', compact('articles', 'faculties', 'mostActiveUsers', 'mostVisitedUrls', 'mostUsedBrowsers', 'guests'));
+        return view('frontend/Marketing Coordinator/coordinator-dashboard', compact('articles', 'faculties', 'mostActiveUsers', 'mostVisitedUrls', 'mostUsedBrowsers', 'guests'));
     }
 
 
