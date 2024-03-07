@@ -87,7 +87,7 @@ class DatabaseSeeder extends Seeder
         }
 
         // Seed magazines
-        $magazines = ['2021 Magazine', '2023 Magazine', '2024 Magazine', '2025 Magazine'];
+        $magazines = ['2021 University-Magazine', '2023 University-Magazine', '2024 University-Magazine', '2025 University-Magazine'];
         foreach ($magazines as $magazineTitle) {
             // Extract year from the magazine title
             $year = substr($magazineTitle, 0, 4);

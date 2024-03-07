@@ -2,18 +2,103 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\RegisterMail;
+use App\Mail\SubmissionMail;
 use ZipArchive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Article;
+use App\Models\AssignedRole;
+use App\Models\Faculty;
 use App\Models\File;
 use App\Models\User;
-
+use Illuminate\Support\Facades\Mail;
 
 class ArticleController extends Controller
 {
 
 
+
+    public function edit(Article $article)
+    {
+        return view('article-edit', [
+            'article' => $article
+        ]);
+    }
+
+
+    public function update(Request $request, Article $article)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'articles.*' => 'nullable|mimes:doc,docx',
+            'images.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048' // Adjust the size as needed
+        ]);
+
+        // Update the article's title
+        $article->update(['title' => $request->title]);
+
+        // Handle article images if new images are provided
+        if ($request->hasFile('images')) {
+            // Define the image extensions to be deleted
+            $imageExtensions = ['jpg', 'jpeg', 'png'];
+
+            // Delete existing image files associated with the article
+            foreach ($imageExtensions as $extension) {
+                $article->files()->where('file_path', 'LIKE', "%.$extension")->delete();
+            }
+
+            foreach ($request->file('images') as $image) {
+                $imagePath = $image->store('public/articles');
+                // Create a new record in the files table for each image
+                $article->files()->create(['file_path' => $imagePath]);
+            }
+        }
+
+        // Handle article files if new files are provided
+        if ($request->hasFile('articles')) {
+            // Define the document extensions to be deleted
+            $documentExtensions = ['doc', 'docx'];
+
+            // Delete existing document files associated with the article
+            foreach ($documentExtensions as $extension) {
+                $article->files()->where('file_path', 'LIKE', "%.$extension")->delete();
+            }
+
+            foreach ($request->file('articles') as $articleFile) {
+                $filePath = $articleFile->store('public/articles');
+                // Create a new record in the files table for each article file
+                $article->files()->create(['file_path' => $filePath]);
+            }
+        }
+
+
+
+        return redirect('/article-detail/' . $article->id);
+    }
+
+
+
+    // public function update(Request $request, Article $article) // Type-hint the Article model
+    // {
+    //     $cleanData = $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'articles.*' => 'required|mimes:doc,docx',
+    //         'images.*' => 'image|mimes:jpg,jpeg,png|max:2048' // Adjust the size as needed
+    //     ]);
+
+
+    //     $article->update($cleanData);
+    //     // dd($article->update($cleanData));
+    //     return redirect('/article-detail/' . $article->id);;
+    // }
+
+
+    public function articleDetail(Article $article) // Type-hint the Article model
+    {
+        // dd($article);
+        return view('article-detail', compact('article'));
+    }
     public function toggleSelected(Article $article, Request $request) // Type-hint the Article model
     {
         // No need to find the article, it's already injected by Laravel due to route model binding
@@ -31,7 +116,8 @@ class ArticleController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'articles.*' => 'required|mimes:doc,docx',
-            'images.*' => 'image|mimes:jpg,jpeg,png|max:2048' // Adjust the size as needed
+            'images.*' => 'image|mimes:jpg,jpeg,png|max:2048', // Adjust the size as needed
+            'terms' => 'accepted' // Validation rule for the Terms checkbox
         ]);
 
         // Assuming you're manually managing the user authentication for now
@@ -65,6 +151,27 @@ class ArticleController extends Controller
                 $imagePath = $image->store($articleDirectory);
                 // Create a record in the files table for each image
                 $article->files()->create(['file_path' => $imagePath]);
+            }
+        }
+
+        $facultyId = auth()->user()->assignedRoles->where('user_id', auth()->user()->id)->first()->faculty_id;
+        // Find the Marketing Coordinator of the specified faculty
+        $marketingCoordinator = AssignedRole::where('faculty_id', $facultyId)
+            ->where('role_id', 2) // Assuming 2 represents the Marketing Coordinator role
+            ->first();
+        $facultyName = Faculty::find($facultyId)->name;
+
+        if ($marketingCoordinator) {
+            // Retrieve the email address of the Marketing Coordinator
+            $coordinatorEmail = User::find($marketingCoordinator->user_id)->email;
+            $coordinatorName = User::find($marketingCoordinator->user_id)->name;
+
+            // Send email with necessary details of the new user
+            try {
+                Mail::to($coordinatorEmail)
+                    ->queue(new SubmissionMail($user, $facultyName, $coordinatorName));
+            } catch (\Throwable $th) {
+                return response()->json(['success' => 'New Article Submission Failed']);
             }
         }
 
@@ -179,10 +286,10 @@ class ArticleController extends Controller
 
 
 
-    public function showUploadForm()
-    {
-        return view('upload-form');
-    }
+    // public function showUploadForm()
+    // {
+    //     return view('upload-form');
+    // }
 
     protected $fillable = ['title', 'user_id', 'file_path'];
     public function downloadArticlesZip()

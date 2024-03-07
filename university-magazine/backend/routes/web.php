@@ -1,5 +1,6 @@
 <?php
 
+use App\Mail\RegisterMail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +17,11 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\MagazineController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 // Route::get('/upload', [ArticleController::class, 'showUploadForm'])->name('upload.form');
 // Route::post('/upload', [ArticleController::class, 'upload'])->name('upload.submit');
@@ -61,16 +66,38 @@ Route::middleware('auth-user')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::get('/dashboard', [AuthController::class, 'dashboard']);
-    Route::get('/da', [ArticleController::class, 'downloadArticlesZip']);
+    Route::get('/submit-contributions', [AuthController::class, 'dashboard']);
+
+
+
+
+
+
+
+
+
+    Route::get('/article-detail/{article}', [ArticleController::class, 'articleDetail']);
+
+    Route::post('/article/{article}/comments', [CommentController::class, 'store']);
+    Route::delete('/article/comment/delete/{comment}', [CommentController::class, 'delete']);
+    Route::get('/article/{article}/edit', [ArticleController::class, 'edit']);
+    Route::patch('/article/{article}/update', [ArticleController::class, 'update']);
+
+    Route::get('/download-articles', [ArticleController::class, 'downloadArticlesZip']);
 
     Route::post('/upload', [ArticleController::class, 'upload']);
+
+    Route::post('/submit-form', [UserController::class, 'register']);
+
+    Route::post('/magazine/store', [MagazineController::class, 'store']);
 });
+
 
 Route::get('/login', [AuthController::class, 'login']);
 Route::post('/login', [AuthController::class, 'apiLogin']);
+Route::get('/register', [AuthController::class, 'create']);
+Route::post('/register', [AuthController::class, 'store']);
 Route::middleware('guest')->group(function () {
-
-    Route::post('/register', [AuthController::class, 'store']);
 });
 
 
@@ -79,5 +106,4 @@ Route::get('/upload-success', function () {
 })->name('upload.success');
 
 Route::get('/', function () {
-    return view('welcome');
 });

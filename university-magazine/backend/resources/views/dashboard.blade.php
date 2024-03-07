@@ -100,6 +100,115 @@
 
 
     @hasRole(['Admin'])
+
+
+        <div class="container">
+            <h1>Create Magazine</h1>
+            <form action="/magazine/store" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="open_date">Open Date</label>
+                    <input type="date" class="form-control" id="open_date" name="open_date" required>
+                </div>
+                <div class="form-group">
+                    <label for="closure_date">Closure Date</label>
+                    <input type="date" class="form-control" id="closure_date" name="closure_date" required>
+                </div>
+                <!-- Add more fields here if needed -->
+                <button type="submit" class="btn btn-primary mt-4">Submit</button>
+
+                <br>
+                <hr>
+            </form>
+        </div>
+
+
+
+        <div class="container">
+
+            <form action="/submit-form" method="post">
+                @csrf
+                <h1>Student</h1>
+                <input type="hidden" name="role" value="4">
+                <input type="text" class="form-control" name="name" placeholder="Name" required>
+                <input type="email" class="form-control" name="email" placeholder="Email" required>
+                <input type="password" class="form-control" name="password" placeholder="Password" required>
+                <input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password"
+                    required>
+
+                <select name="faculty_id" class="form-control" required>
+                    <option value="">Select Faculty</option>
+                    @foreach ($faculties as $faculty)
+                        <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                    @endforeach
+                </select>
+
+                <button class="btn btn-primary" type="submit">Register</button>
+            </form>
+            <hr>
+
+        </div>
+
+        <div class="container">
+
+            <form action="/submit-form" method="post">
+                @csrf
+                <h1>MM</h1>
+                <input type="hidden" name="role" value="3">
+                <input type="text" class="form-control" name="name" placeholder="Name" required>
+                <input type="email" class="form-control" name="email" placeholder="Email" required>
+                <input type="password" class="form-control" name="password" placeholder="Password" required>
+                <input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password"
+                    required>
+
+                <select name="faculty_id" required>
+                    <option value="">Select Faculty</option>
+                    @foreach ($faculties as $faculty)
+                        <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                    @endforeach
+                </select>
+
+                <button type="submit">Register</button>
+            </form>
+            <hr>
+
+        </div>
+
+
+        <div class="container">
+
+            <form action="/submit-form" method="post">
+                @csrf
+                <h1>MC</h1>
+                <input type="hidden" name="role" value="2">
+                <input type="text" class="form-control" name="name" placeholder="Name" required>
+                <input type="email" class="form-control" name="email" placeholder="Email" required>
+                <input type="password" class="form-control" name="password" placeholder="Password" required>
+                <input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password"
+                    required>
+
+                <select name="faculty_id" required>
+                    <option value="">Select Faculty</option>
+                    @foreach ($faculties as $faculty)
+                        <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                    @endforeach
+                </select>
+
+                <button type="submit">Register</button>
+            </form>
+            <hr>
+
+        </div>
+
+
         {{-- Most Visit --}}
         <hr>
         <h1>Most visit</h1>
@@ -131,6 +240,10 @@
     {{-- Faculty List --}}
     @hasRole(['Marketing Manager'])
 
+
+        <br>
+        <hr>
+        <a href="/download-articles" type="button" class="btn btn-primary">Downlaod as Zip</a>
         <br>
         <hr>
         <h1>Faculties</h1>
@@ -138,9 +251,11 @@
             <p>{{ $faculty->name }}</p>
         @endforeach
 
+
+
         <h1>Articles</h1>
         @foreach ($articles as $article)
-            <p>{{ $article->title }}</p>
+            <a href="/article-detail/{{ $article->id }}">{{ $article->title }} </a>
         @endforeach
 
     @endhasRole
@@ -151,9 +266,17 @@
         <hr>
         <h1>Articles</h1>
         @foreach ($articles as $article)
-            <p><input type="checkbox" class="article-checkbox" id="article-{{ $article->id }}"
-                    value="{{ $article->id }}">
-                {{ $article->title }}
+            @php
+                $canCheck = $article->comments->count() != 0;
+            @endphp
+
+
+            <p><input {{ $article->is_selected ? 'checked' : '' }} type="checkbox" class="article-checkbox"
+                    id="article-{{ $article->id }}" value="{{ $article->id }}" {{ $canCheck ? '' : 'disabled' }}>
+
+                <a href="/article-detail/{{ $article->id }}">{{ $article->title }} </a>
+
+                {{ $canCheck ? 'Already Commented' : 'No Comment' }}
             </p>
         @endforeach
 
@@ -187,6 +310,7 @@
 
         <hr>
         <h1>Guest List</h1>
+        {{-- @dd($guests->count()) --}}
         @foreach ($guests as $guest)
             {{-- @dd($browser) --}}
             <p>
@@ -211,9 +335,16 @@
             <input type="file" name="articles[]" accept=".doc,.docx" multiple>
             @error('articles')
                 <p class="text-danger">{{ $message }}</p>
-            @enderror <!-- Display validation error for 'articles' input -->
+            @enderror
             <br>
             <input type="file" name="images[]" accept="image/*" multiple><br>
+            <!-- Terms and Conditions checkbox -->
+            <input type="checkbox" name="terms" id="terms">
+            <label for="terms">I agree to the <a href="/terms-and-conditions">Terms and Conditions</a>.</label>
+            @error('terms')
+                <p class="text-danger">{{ $message }}</p>
+            @enderror
+            <br>
             <button type="submit">Upload Article</button>
         </form>
     @endhasRole
@@ -260,10 +391,15 @@
 
                                     {{-- <a href="{{ route('view.word', ['filename' => $file->file_path]) }}">View Word File</a> --}}
 
+                                    {{-- @dd(asset($filePath)) --}}
 
-                                    <button class="btn btn-primary" onclick="openDocument('{{ asset($filePath) }}')">Open
+                                    {{-- <button class="btn btn-primary" onclick="openDocument('{{ asset($filePath) }}')">Open
                                         Document</button>
+                                    <br> --}}
+
+                                    <a href="/article-detail/{{ $article->id }}" class="btn btn-primary">View Detail</a>
                                     <br>
+
 
                                 </div>
                                 <div class="w-100 d-none d-md-block"></div>

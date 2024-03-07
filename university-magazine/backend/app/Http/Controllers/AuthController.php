@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\AssignedRole;
 use App\Models\AuditLog;
 use App\Models\Faculty;
 use App\Models\Role;
@@ -12,9 +13,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Laravel\Sanctum\HasApiTokens;
 use WhichBrowser\Parser;
-
+use App\Mail\RegisterMail;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -29,6 +33,8 @@ class AuthController extends Controller
         $mostUsedBrowsers = [];
         $mostVisitedUrls = [];
         $articles = [];
+        // Load faculties for display
+        $faculties = Faculty::all();
 
         $user = auth()->user();
 
@@ -91,9 +97,10 @@ class AuthController extends Controller
             })->get();
 
             // see guest
-            $guests = User::whereHas('assignedRoles', function ($query) use ($facultyId) {
-                $query->where('name', 'Guest')
-                    ->where('faculty_id', $facultyId);
+            $guests = User::whereHas('roles', function ($query) use ($facultyId) {
+                $query->where('name', 'Guest');
+            })->whereHas('assignedRoles', function ($query) use ($facultyId) {
+                $query->where('faculty_id', $facultyId);
             })->get();
         }
 
@@ -105,6 +112,8 @@ class AuthController extends Controller
         if ($user->hasRole(['Student'])) {
             // Retrieve the student's own contributions (articles)
             $articles = $user->articles;
+
+            return view('frontend/Student/student-dashboard', compact('articles', 'faculties', 'mostActiveUsers', 'mostVisitedUrls', 'mostUsedBrowsers', 'guests'));
         }
 
 
@@ -122,9 +131,7 @@ class AuthController extends Controller
 
 
 
-        // Load faculties for display
-        $faculties = Faculty::all();
-        return view('frontend/Marketing Coordinator/coordinator-dashboard', compact('articles', 'faculties', 'mostActiveUsers', 'mostVisitedUrls', 'mostUsedBrowsers', 'guests'));
+        return view('dashboard', compact('articles', 'faculties', 'mostActiveUsers', 'mostVisitedUrls', 'mostUsedBrowsers', 'guests'));
     }
 
 
@@ -133,13 +140,73 @@ class AuthController extends Controller
     {
 
         auth()->logout();
-        return redirect('/login')->with('success', 'Good Bye');
+        return redirect('/frontend/login')->with('success', 'Good Bye');
     }
+
+
+    public function create()
+    {
+        $faculties = Faculty::all();
+        return view('frontend/Guest/guest-register', compact('faculties'));
+    }
+
+
+    public function store(Request $request)
+    {
+        $cleanData = request()->validate([
+            'name' => 'required',
+            'email' => ['required', Rule::unique('users', 'email')],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'faculty_id' => 'required|exists:faculties,id',
+            'role' => 'required|numeric',
+        ]);
+
+        // Create the new user
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        // Find the Marketing Coordinator of the specified faculty
+        $marketingCoordinator = AssignedRole::where('faculty_id', $request->faculty_id)
+            ->where('role_id', 2) // Assuming 2 represents the Marketing Coordinator role
+            ->first();
+        $facultyName = Faculty::find($request->faculty_id)->name;
+
+        if ($marketingCoordinator) {
+            // Retrieve the email address of the Marketing Coordinator
+            $coordinatorEmail = User::find($marketingCoordinator->user_id)->email;
+            $coordinatorName = User::find($marketingCoordinator->user_id)->name;
+
+            // Send email with necessary details of the new user
+            try {
+                Mail::to($coordinatorEmail)
+                    ->queue(new RegisterMail($user, $facultyName, $coordinatorName));
+            } catch (\Throwable $th) {
+                return response()->json(['success' => 'Account Creation Not Successful']);
+            }
+        }
+
+        // Assign role and faculty to the user
+        AssignedRole::create([
+            'user_id' => $user->id,
+            'role_id' => $request->role,
+            'faculty_id' => $request->faculty_id,
+        ]);
+
+        auth()->login($user);
+        return redirect('/dashboard')->with('success', 'Welcome to MMS ' . $user->name);
+    }
+
+
 
 
     public function login()
     {
-        return view('login');
+        return view('frontend/Guest/guest-login');
+        // return view('frontend/login');
+        // return view('frontend/');
     }
 
 
