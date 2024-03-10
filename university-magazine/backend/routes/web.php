@@ -89,6 +89,7 @@ Route::middleware('auth-user')->group(function () {
     Route::get('/guest-list', [UserController::class, 'showGuest']);
     Route::get('/coordinator-profile', [UserController::class, 'studentProfile']);
 
+    Route::get('/manager-profile', [UserController::class, 'studentProfile']);
 
 
 

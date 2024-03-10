@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->date('open_date');
             $table->date('closure_date');
-            // $table->date('final_date');
+            $table->date('finalclosure_date');
             $table->timestamps();
         });
     }

@@ -18,6 +18,7 @@ use Illuminate\Validation\Rule;
 use Laravel\Sanctum\HasApiTokens;
 use WhichBrowser\Parser;
 use App\Mail\RegisterMail;
+use App\Models\Magazine;
 use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
@@ -108,6 +109,31 @@ class AuthController extends Controller
         if ($user->hasRole(['Marketing Manager'])) {
             // For other users, retrieve all articles
             $articles = Article::where('is_selected', 1)->get();
+            $magazines = Magazine::all();
+
+            if ($request->query('faculty')) {
+
+
+                $facultyId = $request->query('faculty');
+
+                $faculty = Faculty::find($facultyId);
+
+                // Retrieve articles submitted by students of the Marketing Coordinator's faculty
+                $articles = Article::whereHas('user.assignedRoles', function ($query) use ($facultyId) {
+                    $query->where('faculty_id', $facultyId);
+                })->get();
+
+                // see guest
+                $guests = User::whereHas('roles', function ($query) use ($facultyId) {
+                    $query->where('name', 'Guest');
+                })->whereHas('assignedRoles', function ($query) use ($facultyId) {
+                    $query->where('faculty_id', $facultyId);
+                })->get();
+
+                return view('frontend/Marketing Manager/manager-dashboard-detail', compact('articles', 'faculty', 'mostActiveUsers', 'mostVisitedUrls', 'mostUsedBrowsers', 'guests'));
+            }
+
+            return view('frontend/Marketing Manager/manager-dashboard', compact('articles', 'faculties', 'mostActiveUsers', 'mostVisitedUrls', 'mostUsedBrowsers', 'guests', 'magazines'));
         }
 
         if ($user->hasRole(['Student'])) {

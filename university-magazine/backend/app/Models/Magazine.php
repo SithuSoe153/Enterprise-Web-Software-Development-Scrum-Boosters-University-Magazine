@@ -9,7 +9,7 @@ class Magazine extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 'open_date', 'closure_date', 'final_date'];
+    protected $fillable = ['title', 'description', 'open_date', 'closure_date', 'finalclosure_date'];
 
     public function articles()
     {

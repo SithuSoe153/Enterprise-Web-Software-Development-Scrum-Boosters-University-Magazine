@@ -69,6 +69,9 @@
 
 <body>
 
+    @hasRole(['Marketing Manager'])
+        @include('frontend/Marketing Manager/manager-slidebar')
+    @endhasRole
     @hasRole(['Marketing Coordinator'])
         @include('frontend/Marketing Coordinator/coordinator-slidebar')
     @endhasRole
@@ -178,8 +181,9 @@
                                         ->user()
                                         ->assignedRoles->where('user_id', auth()->user()->id)
                                         ->first()->faculty_id;
-
-                                    $facultyName = Faculty::find($facultyId)->name;
+                                    if ($facultyId !== null) {
+                                        $facultyName = Faculty::find($facultyId)->name;
+                                    }
 
                                 @endphp
 
@@ -188,7 +192,9 @@
                                     <div class="text-left">
                                         <div>
                                             <b>Student Name: </b> {{ auth()->user()->name }}<br>
-                                            <b>Faculty Name: </b> {{ $facultyName }}<br>
+                                            @if (!auth()->user()->hasRole(['Marketing Manager']))
+                                                <b>Faculty Name: </b> {{ $facultyName }}<br>
+                                            @endif
                                             <b>Email Address: </b>{{ auth()->user()->email }} <br>
                                         </div>
                                     </div>

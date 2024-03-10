@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('kmd123'),
+            'profile' => '../img/default.jpg'
         ])->roles()->attach(Role::where('name', 'Admin')->first()->id);
 
         // Marketing Manager
@@ -42,6 +43,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Marketing Manager',
             'email' => 'mm@gmail.com',
             'password' => bcrypt('kmd123'),
+            'profile' => '../img/default.jpg'
+
         ])->roles()->attach(Role::where('name', 'Marketing Manager')->first()->id);
 
         // Marketing Managers for each faculty
@@ -51,6 +54,8 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Marketing Coordinator ' . $facultyName,
                 'email' => $email,
                 'password' => bcrypt('kmd123'),
+                'profile' => '../img/default.jpg'
+
             ]);
 
             $role = Role::where('name', 'Marketing Coordinator')->first();
@@ -68,6 +73,8 @@ class DatabaseSeeder extends Seeder
                     'name' => 'Student',
                     'email' => $email,
                     'password' => bcrypt('kmd123'),
+                    'profile' => '../img/default.jpg'
+
                 ]);
                 $role = Role::where('name', 'Student')->first();
                 $user->roles()->attach($role->id, ['faculty_id' => $facultyId]);
@@ -81,25 +88,30 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Guest',
                 'email' => $email,
                 'password' => bcrypt('kmd123'),
+                'profile' => '../img/default.jpg'
+
             ]);
             $role = Role::where('name', 'Guest')->first();
             $user->roles()->attach($role->id, ['faculty_id' => Faculty::where('name', $facultyName)->first()->id]);
         }
 
         // Seed magazines
-        $magazines = ['2021 University-Magazine', '2023 University-Magazine', '2024 University-Magazine', '2025 University-Magazine'];
+        // $magazines = ['2021 University-Magazine', '2023 University-Magazine', '2024 University-Magazine', '2025 University-Magazine'];
+        $magazines = ['2021 University-Magazine', '2023 University-Magazine', '2024 University-Magazine'];
         foreach ($magazines as $magazineTitle) {
             // Extract year from the magazine title
             $year = substr($magazineTitle, 0, 4);
 
             // Define open_date and closure_date based on the year
             $openDate = $year . '-01-01'; // Assuming open date is January 1st of the year
-            $closureDate = $year . '-12-31'; // Assuming closure date is December 31st of the year
+            $closureDate = $year . '-10-31'; // Assuming closure date is December 31st of the year
+            $finalclosureDate = $year . '-12-31'; // Assuming closure date is December 31st of the year
 
             \App\Models\Magazine::create([
                 'title' => $magazineTitle,
                 'open_date' => $openDate,
                 'closure_date' => $closureDate,
+                'finalclosure_date' => $finalclosureDate,
             ]);
         }
     }

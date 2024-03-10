@@ -11,10 +11,63 @@
                         <a href="/dashboard" aria-expanded="false"><span class="educate-icon educate-home icon-wrap"
                                 aria-hidden="true"></span> <span class="mini-click-non">Dashboard</span></a>
                     </li>
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
                     <li>
-                        <a href="/submit-contributions" aria-expanded="false"><span
-                                class="educate-icon educate-student icon-wrap" aria-hidden="true"></span> <span
-                                class="mini-click-non">Submit Article</span></a>
+
+                        @php
+                            $closureDate = App\Models\Magazine::latest()->first()->closure_date;
+                            // @dd($closureDate)
+                        @endphp
+
+
+
+                        @if ($closureDate && now()->gt($closureDate))
+                            <a href="#" class="submit-contributions-link" data-toggle="popover"
+                                data-placement="top" data-content="The closure date is beyond">
+                                <span class="educate-icon educate-student icon-wrap" aria-hidden="true"></span>
+                                <span class="mini-click-non">Submit Article</span>
+                            </a>
+                        @else
+                            <a href="/submit-contributions" aria-expanded="false">
+                                <span class="educate-icon educate-student icon-wrap" aria-hidden="true"></span>
+                                <span class="mini-click-non">Submit Article</span>
+                            </a>
+                        @endif
+
+                        <script>
+                            $(document).ready(function() {
+                                // Initialize Bootstrap popover
+                                $('[data-toggle="popover"]').popover({
+                                    trigger: 'hover', // Show popover on hover
+                                });
+
+                                // Prevent default behavior of the link
+                                $('.submit-contributions-link').click(function(event) {
+                                    event.preventDefault();
+                                });
+                            });
+                        </script>
+
+                        <style>
+                            /* Optional CSS styling for the link */
+                            .submit-contributions-link {
+                                color: #ccc;
+                                cursor: not-allowed;
+                                text-decoration: none;
+                                /* Remove underline */
+                                opacity: 0.5;
+                                /* Dim the link */
+                            }
+
+                            /* Custom CSS to change popover content color */
+                            .popover-content {
+                                color: black;
+                                /* Change to your desired color */
+                            }
+                        </style>
+
+
                     </li>
                     <li>
                         <a href="/contribution-newsfeed" aria-expanded="false"><span
