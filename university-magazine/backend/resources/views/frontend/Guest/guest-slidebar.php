@@ -1,5 +1,5 @@
 <?php
-session_start();
+();
 $currentURL = $_SERVER['PHP_SELF'];
 ?>
 <div class="left-sidebar-pro">
@@ -20,11 +20,11 @@ $currentURL = $_SERVER['PHP_SELF'];
                         <li>
                             <a href="submit-contributions.php" aria-expanded="false"><span class="educate-icon educate-student icon-wrap" aria-hidden="true"></span> <span class="mini-click-non">Submit Article</span></a>
                         </li>
-                        
-                        
-                        
-                        
-                        
+
+
+
+
+
                     </ul>
                 </nav>
             </div>

@@ -1,5 +1,5 @@
 <?php
-session_start();
+();
 $currentURL = $_SERVER['PHP_SELF'];
 ?>
 <div class="left-sidebar-pro">
@@ -48,4 +48,3 @@ $currentURL = $_SERVER['PHP_SELF'];
                     </div>
                 </div>
             </div>
-    

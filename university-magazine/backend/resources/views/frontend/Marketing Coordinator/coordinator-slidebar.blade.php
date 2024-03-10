@@ -1,7 +1,7 @@
 <div class="left-sidebar-pro">
     <nav id="sidebar" class="">
         <div class="sidebar-header">
-            <a href="/dashboard"><img class="main-logo" src="{{ asset('img/scrumlogo.png') }}" width="200px"
+            <a href="index.php"><img class="main-logo" src="{{ asset('img/scrumlogo.png') }}" width="200px"
                     alt="" /></a>
         </div>
         <div class="left-custom-menu-adp-wrap comment-scrollbar">
@@ -12,22 +12,17 @@
                                 aria-hidden="true"></span> <span class="mini-click-non">Dashboard</span></a>
                     </li>
                     <li>
-                        <a href="/submit-contributions" aria-expanded="false"><span
-                                class="educate-icon educate-student icon-wrap" aria-hidden="true"></span> <span
-                                class="mini-click-non">Submit Article</span></a>
+                        <a href="/guest-list" aria-expanded="false"><span
+                                class="educate-icon educate-data-table icon-wrap" aria-hidden="true"></span> <span
+                                class="mini-click-non">Guest List</span></a>
                     </li>
                     <li>
-                        <a href="/contribution-newsfeed" aria-expanded="false"><span
-                                class="educate-icon educate-apps icon-wrap" aria-hidden="true"></span> <span
-                                class="mini-click-non">Article Feed</span></a>
-                    </li>
-                    <li>
-                        <a href="/student-mail" aria-expanded="false"><span
+                        <a href="/coordinator-mail" aria-expanded="false"><span
                                 class="educate-icon educate-message icon-wrap" aria-hidden="true"></span> <span
                                 class="mini-click-non">Mail</span></a>
                     </li>
                     <li>
-                        <a href="/student-profile" aria-expanded="false"><span
+                        <a href="/coordinator-profile" aria-expanded="false"><span
                                 class="educate-icon educate-professor icon-wrap" aria-hidden="true"></span> Profile</a>
                     </li>
                     <li>
@@ -39,35 +34,31 @@
         </div>
     </nav>
 </div>
+
 <div class="mobile-menu-area">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="mobile-menu">
                     <nav id="dropdown">
-                        <ul class="mobile-menu-nav">
+                        <ul class="metismenu" id="menu1">
                             <li>
-                                <a href="student-dashboard.php" aria-expanded="false"><span
+                                <a href="coordinator-dashboard.php" aria-expanded="false"><span
                                         class="educate-icon educate-home icon-wrap" aria-hidden="true"></span> <span
                                         class="mini-click-non">Dashboard</span></a>
                             </li>
                             <li>
-                                <a href="submit-contributions.php" aria-expanded="false"><span
-                                        class="educate-icon educate-student icon-wrap" aria-hidden="true"></span> <span
-                                        class="mini-click-non">Submit Article</span></a>
+                                <a href="guest-list.php" aria-expanded="false"><span
+                                        class="educate-icon educate-data-table icon-wrap" aria-hidden="true"></span>
+                                    <span class="mini-click-non">Guest List</span></a>
                             </li>
                             <li>
-                                <a href="contribution-newfeeds.php" aria-expanded="false"><span
-                                        class="educate-icon educate-apps icon-wrap" aria-hidden="true"></span> <span
-                                        class="mini-click-non">Article Feed</span></a>
-                            </li>
-                            <li>
-                                <a href="student-mail.php" aria-expanded="false"><span
+                                <a href="coordinator-mail.php" aria-expanded="false"><span
                                         class="educate-icon educate-message icon-wrap" aria-hidden="true"></span> <span
                                         class="mini-click-non">Mail</span></a>
                             </li>
                             <li>
-                                <a href="student-profile.php" aria-expanded="false"><span
+                                <a href="coordinator-profile.php" aria-expanded="false"><span
                                         class="educate-icon educate-professor icon-wrap" aria-hidden="true"></span>
                                     Profile</a>
                             </li>

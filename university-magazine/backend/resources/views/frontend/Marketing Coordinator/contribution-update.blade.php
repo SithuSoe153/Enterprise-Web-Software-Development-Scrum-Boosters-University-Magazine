@@ -4,78 +4,83 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Student Profile | Kiaalap - Kiaalap Admin Template</title>
+    <title>Basic Form Element | Kiaalap - Kiaalap Admin Template</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- favicon
   ============================================ -->
-    <link rel="shortcut icon" type="../image/x-icon" href="../img/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
     <!-- Google Fonts
   ============================================ -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900" rel="stylesheet">
     <!-- Bootstrap CSS
   ============================================ -->
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
     <!-- Bootstrap CSS
   ============================================ -->
-    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
     <!-- owl.carousel CSS
   ============================================ -->
-    <link rel="stylesheet" href="../css/owl.carousel.css">
-    <link rel="stylesheet" href="../css/owl.theme.css">
-    <link rel="stylesheet" href="../css/owl.transitions.css">
+    <link rel="stylesheet" href="/css/owl.carousel.css">
+    <link rel="stylesheet" href="/css/owl.theme.css">
+    <link rel="stylesheet" href="/css/owl.transitions.css">
     <!-- animate CSS
   ============================================ -->
-    <link rel="stylesheet" href="../css/animate.css">
+    <link rel="stylesheet" href="/css/animate.css">
     <!-- normalize CSS
   ============================================ -->
-    <link rel="stylesheet" href="../css/normalize.css">
+    <link rel="stylesheet" href="/css/normalize.css">
     <!-- meanmenu icon CSS
   ============================================ -->
-    <link rel="stylesheet" href="../css/meanmenu.min.css">
+    <link rel="stylesheet" href="/css/meanmenu.min.css">
     <!-- main CSS
   ============================================ -->
-    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="/css/main.css">
     <!-- educate icon CSS
   ============================================ -->
-    <link rel="stylesheet" href="../css/educate-custon-icon.css">
+    <link rel="stylesheet" href="/css/educate-custon-icon.css">
     <!-- morrisjs CSS
   ============================================ -->
-    <link rel="stylesheet" href="../css/morrisjs/morris.css">
+    <link rel="stylesheet" href="/css/morris/js/morris.css">
     <!-- mCustomScrollbar CSS
   ============================================ -->
-    <link rel="stylesheet" href="../css/scrollbar/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="/css/scrollbar/jquery.mCustomScrollbar.min.css">
     <!-- metisMenu CSS
   ============================================ -->
-    <link rel="stylesheet" href="../css/metisMenu/metisMenu.min.css">
-    <link rel="stylesheet" href="../css/metisMenu/metisMenu-vertical.css">
+    <link rel="stylesheet" href="/css/metisMenu/metisMenu.min.css">
+    <link rel="stylesheet" href="/css/metisMenu/metisMenu-vertical.css">
     <!-- calendar CSS
   ============================================ -->
-    <link rel="stylesheet" href="../css/calendar/fullcalendar.min.css">
-    <link rel="stylesheet" href="../css/calendar/fullcalendar.print.min.css">
+    <link rel="stylesheet" href="/css/calendar/fullcalendar.min.css">
+    <link rel="stylesheet" href="{{ asset('css/calendar/fullcalendar.print.min.css') }}">
+    <!-- modals CSS
+  ============================================ -->
+    <link rel="stylesheet" href="{{ asset('css/modals.css') }}">
     <!-- forms CSS
   ============================================ -->
-    <link rel="stylesheet" href="../css/form/all-type-forms.css">
+    <link rel="stylesheet" href="{{ asset('css/form/all-type-forms.css') }}">
     <!-- style CSS
   ============================================ -->
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="{{ asset('style.css') }}">
     <!-- responsive CSS
   ============================================ -->
-    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="/css/responsive.css">
     <!-- modernizr JS
   ============================================ -->
-    <script src="../js/vendor/modernizr-2.8.3.min.js"></script>
+    <script src="/js/vendor/modernizr-2.8.3.min.js"></script>
+
+    <style>
+        .btn-spacing {
+            margin-right: 10px;
+        }
+    </style>
+
 </head>
 
 <body>
-    <!--[if lt IE 8]>
-  <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
- <![endif]-->
-    <!-- Start Left menu area -->
-    @include('frontend/Student/student-slidebar')
+    @include('frontend/Marketing Coordinator/coordinator-slidebar')
 
-    <!-- End Left menu area -->
-    <!-- Start Welcome area -->
+
     <div class="all-content-wrapper">
         <div class="container-fluid">
             <div class="row">
@@ -90,14 +95,6 @@
         <div class="header-advance-area">
             <div class="header-top-area">
                 <div class="container-fluid">
-
-                    @if (session()->has('success'))
-                        <div class="alert alert-success text-center" role="alert">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
-
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="header-top-wraper">
@@ -110,14 +107,18 @@
                                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
                                         <div class="header-right-info">
                                             <ul class="nav navbar-nav mai-top-nav header-right-menu">
+
+
                                                 <li class="nav-item">
                                                     <a href="#" role="button" class="nav-link dropdown-toggle">
                                                         <span class="admin-name">Welcome
                                                             {{ auth()->user()->name }}</span>
                                                         <img
                                                             src="{{ asset('storage/' . auth()->user()->profile) }}"alt="">
+
                                                     </a>
                                                 </li>
+
                                             </ul>
                                         </div>
                                     </div>
@@ -128,21 +129,21 @@
                 </div>
             </div>
         </div>
-        <!-- Single pro tab review Start-->
-        <form action="/upload" method="post" enctype="multipart/form-data">
-            @csrf
 
+        <form action="/article/{{ $article->id }}/update" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('patch')
+
+            <!-- Single pro tab review Start-->
             <div class="single-pro-review-area mt-t-30 mg-b-15">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12 col-md-8 col-sm-8 col-xs-12">
                             <div class="product-payment-inner-st res-mg-t-30 analysis-progrebar-ctn">
                                 <ul id="myTabedu1" class="tab-review-design">
-                                    <h1>Submit your contribution here.</h1>
+                                    <h1>Edit Contribution</h1>
 
                                 </ul>
-
-
                                 <div id="myTabContent" class="tab-content custom-product-edit st-prf-pro">
                                     <div class="row">
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -152,56 +153,46 @@
                                                         <div class="form-group">
                                                             <label for="">Submissio Date</label>
                                                             <div class="form-group">
+                                                                <input type="text" class="form-control"
+                                                                    value="{{ $article->created_at->format('d M Y') }}"
+                                                                    disabled>
+                                                            </div>
+                                                        </div>
 
-                                                                <input class="form-control" type="text"
-                                                                    id="dateInput" readonly>
-
-                                                                <script>
-                                                                    // Get the current date
-                                                                    let currentDate = new Date();
-
-                                                                    // Format the date as desired (DD/MM/YYYY)
-                                                                    let formattedDate = currentDate.getDate().toString().padStart(2, '0') + '/' +
-                                                                        (currentDate.getMonth() + 1).toString().padStart(2, '0') + '/' +
-                                                                        currentDate.getFullYear();
-
-                                                                    // Set the formatted date as the value of the input field
-                                                                    document.getElementById('dateInput').value = formattedDate;
-                                                                </script>
-
-
-
-                                                                {{-- <link rel="stylesheet"
-                                                                href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-                                                            <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-                                                            <input type="text" class="form-control" id="datePicker"
-                                                                placeholder="DD/MM/YYYY">
-
-                                                            <script>
-                                                                flatpickr("#datePicker", {
-                                                                    altInput: true,
-                                                                    altFormat: "d/m/Y",
-                                                                    dateFormat: "Y-m-d",
-                                                                    defaultDate: new Date(), // Set the defaultDate to today's date
-                                                                });
-                                                            </script> --}}
-
+                                                        <div class="form-group">
+                                                            <label for="">Student Name</label>
+                                                            <div class="form-group">
+                                                                <input type="text" class="form-control"
+                                                                    value="{{ $article->user->name }}" disabled>
                                                             </div>
                                                         </div>
 
 
-
-
-
                                                     </div>
-                                                    <div class="col-lg-6">
+                                                    @php
 
+                                                        use App\Models\AssignedRole;
+                                                        use App\Models\Faculty;
+
+                                                        $facultyId = $article->user->assignedRoles
+                                                            ->where('user_id', $article->user->id)
+                                                            ->first()->faculty_id;
+
+                                                        $facultyName = Faculty::find($facultyId)->name;
+
+                                                    @endphp
+
+                                                    <div class="col-lg-6">
+                                                        <label for="">Faculty</label>
+                                                        <div class="form-group">
+                                                            <input type="text" class="form-control"
+                                                                value="{{ $facultyName }}" disabled>
+                                                        </div>
                                                         <label for="">Title</label>
                                                         <div class="form-group">
                                                             <input type="text" class="form-control" name="title"
                                                                 placeholder="Give contribution a title"
-                                                                value="{{ old('title') }}">
+                                                                value="{{ old('title', $article->title) }}">
 
                                                             @error('title')
                                                                 <p class="text-danger">{{ $message }}</p>
@@ -212,7 +203,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="">Description</label>
-                                                    <textarea type="text" name="description" class="form-control" placeholder="Subject">{{ old('description') }}</textarea>
+                                                    <textarea type="text" name="description" class="form-control" placeholder="Subject">{{ old('title', $article->description) }}</textarea>
                                                     @error('description')
                                                         <p class="text-danger">{{ $message }}</p>
                                                     @enderror
@@ -230,8 +221,6 @@
                                                                     accept=".doc,.docx" multiple
                                                                     onchange="document.getElementById('prepend-big-btn').value = this.value;">
                                                             </div>
-
-
                                                             <input type="text" id="prepend-big-btn"
                                                                 placeholder="no file selected">
                                                             @error('articles')
@@ -241,6 +230,24 @@
                                                     </div>
                                                 </div>
 
+
+                                                {{-- Selected files --}}
+                                                @if ($article->files->isNotEmpty())
+
+                                                    <p>Selected files:</p>
+                                                    <ul>
+
+                                                        @foreach ($article->files as $file)
+                                                            @if (Str::endsWith($file->file_path, ['.doc', '.docx']))
+                                                                <li>{{ basename($file->file_path) }}</li>
+                                                            @endif
+                                                        @endforeach
+                                                    </ul>
+                                                @endif
+
+
+
+                                                <br>
                                                 <div class="form-group">
                                                     <label for="">Attach photos</label>
                                                     <div class="file-upload-inner ts-forms">
@@ -257,15 +264,66 @@
                                                                     <p class="text-danger">{{ $message }}</p>
                                                                 @enderror
                                                             </div>
-
                                                             <input type="text" id="prepend-big-btn"
                                                                 placeholder="no file selected">
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div class="i-checks pull-left">
+                                                {{-- Images preview --}}
 
+                                                <div id="stored-image-preview">
+                                                    @foreach ($article->files as $file)
+                                                        @php
+                                                            $filePath = str_replace(
+                                                                'public/',
+                                                                'storage/',
+                                                                $file->file_path,
+                                                            );
+                                                        @endphp
+
+                                                        @if (Str::endsWith($file->file_path, ['.doc', '.docx']))
+                                                            @continue
+                                                        @endif
+
+                                                        <img src="{{ asset($filePath) }}"
+                                                            style="width: 100px; height: 100px; object-fit: cover; margin-right: 10px;">
+                                                    @endforeach
+                                                </div>
+
+
+
+                                                <script>
+                                                    document.getElementById('imageUpload').addEventListener('change', function() {
+                                                        var imagePreview = document.getElementById('image-preview');
+                                                        var stored = document.getElementById('stored-image-preview');
+                                                        imagePreview.innerHTML = ''; // Optionally clear existing preview images
+                                                        // stored.innerHTML = '';
+
+                                                        for (let i = 0; i < this.files.length; i++) {
+                                                            const file = this.files[i];
+
+                                                            if (file) {
+                                                                const reader = new FileReader();
+
+                                                                reader.onload = function(e) {
+                                                                    const img = document.createElement('img');
+                                                                    img.src = e.target.result;
+                                                                    img.style.width = '100px';
+                                                                    img.style.height = '100px';
+                                                                    img.style.objectFit = 'cover';
+                                                                    img.style.marginRight = '10px';
+                                                                    imagePreview.appendChild(img);
+                                                                };
+
+                                                                reader.readAsDataURL(file);
+                                                            }
+                                                        }
+                                                    });
+                                                </script>
+
+                                                <br>
+                                                <div class="i-checks pull-left">
                                                     <input type="checkbox" name="terms" id="terms">
                                                     <label for="checkboxTerms">Agree <a href="#"
                                                             class="zoomInDown mg-t text-center" href="#"
@@ -274,8 +332,10 @@
                                                     @error('terms')
                                                         <p class="text-danger">{{ $message }}</p>
                                                     @enderror
-
                                                 </div>
+
+
+
 
                                                 <div class="row">
                                                     <div class="col-lg-12">
@@ -284,9 +344,9 @@
                                                                 class="btn btn-custon-four btn-primary zoomInDown mg-t text-center">
                                                                 <i class="fa fa-check edu-checked-pro"
                                                                     aria-hidden="true"></i>
-                                                                <a class="zoomInDown mg-t text-center" href="/upload"
-                                                                    data-toggle="modal" data-target="#zoomInDown1"
-                                                                    style="color: white;">Submit Article</a></button>
+                                                                Update Article
+                                                            </button>
+
                                                             <button type="reset"
                                                                 class="btn btn-custon-four btn-danger">
                                                                 <i class="fa fa-times edu-danger-error"
@@ -362,105 +422,54 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
-
-                                                        <div class="sparkline11-graph">
-                                                            <div class="basic-login-form-ad">
-                                                                <div class="row">
-                                                                    <div class="col-lg-12 text-center">
-                                                                        <div id="zoomInDown2"
-                                                                            class="modal modal-edu-general modal-zoomInDown fade"
-                                                                            role="dialog">
-                                                                            <div
-                                                                                class=" modal-dialog modal-dialog-centered">
-                                                                                <div class="modal-content">
-                                                                                    <div
-                                                                                        class="modal-close-area modal-close-df">
-                                                                                        <a class="close"
-                                                                                            data-dismiss="modal"
-                                                                                            href="#"><i
-                                                                                                class="fa fa-close"></i></a>
-                                                                                    </div>
-                                                                                    <div class="modal-body">
-                                                                                        <div
-                                                                                            class="modal-login-form-inner">
-                                                                                            <div class="row">
-                                                                                                <div
-                                                                                                    class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="row">
-                                                                                                <div
-                                                                                                    class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                                                                    <div
-                                                                                                        class="basic-login-inner modal-basic-inner">
-                                                                                                        <div
-                                                                                                            class="container">
-                                                                                                            <div
-                                                                                                                class="row justify-content-center">
-                                                                                                                <div
-                                                                                                                    class="col-lg-6 col-md-8 col-sm-10 col-xs-12">
-                                                                                                                    <form
-                                                                                                                        action="#">
-                                                                                                                        <div
-                                                                                                                            class="login-btn-inner">
-                                                                                                                            <div
-                                                                                                                                class="row">
-                                                                                                                                <div
-                                                                                                                                    class="col-lg-12 col-md-8 col-sm-8 col-xs-12 text-center">
-                                                                                                                                    <div
-                                                                                                                                        class="login-horizental">
-                                                                                                                                        <button
-                                                                                                                                            class="btn btn-sm btn-primary login-submit-cs"
-                                                                                                                                            type="submit">Terms
-                                                                                                                                            and
-                                                                                                                                            cConditions</button>
-                                                                                                                                    </div>
-                                                                                                                                </div>
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                    </form>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-
-
                                                     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                                 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
+                    <div class="containet">
+                        <br>
+                        <br>
+                        {{-- Footer Start --}}
+                        {{-- @include('frontend.footer') --}}
+                    </div>
                 </div>
-
-                <div>
-                    <br>
-                    <br>
-                    {{-- Footer Start --}}
-                    @include('frontend.footer')
-
-                </div>
-
             </div>
+
         </form>
 
         <!-- jquery

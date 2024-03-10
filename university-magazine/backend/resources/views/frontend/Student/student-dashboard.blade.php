@@ -76,15 +76,10 @@
 </head>
 
 <body>
-    <!--[if lt IE 8]>
-  <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
- <![endif]-->
-    <!-- Start Left menu area -->
+
     @include('frontend/Student/student-slidebar')
 
 
-    <!-- End Left menu area -->
-    <!-- Start Welcome area -->
     <div class="all-content-wrapper">
         <div class="container-fluid">
             <div class="row">
@@ -103,26 +98,24 @@
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="header-top-wraper">
                                 <div class="row">
-                                    <!-- <div class="col-lg-1 col-md-0 col-sm-1 col-xs-12">
-                                        <div class="menu-switcher-pro">
-                                            <button type="button" id="sidebarCollapse" class="btn bar-button-pro header-drl-controller-btn btn-info navbar-btn">
-             <i class="educate-icon educate-nav"></i>
-            </button>
-                                        </div>
-                                    </div> -->
+
                                     <div class="col-lg-6 col-md-7 col-sm-6 col-xs-12">
                                         <div class="header-top-menu tabl-d-n">
 
                                         </div>
                                     </div>
+
+
                                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
                                         <div class="header-right-info">
                                             <ul class="nav navbar-nav mai-top-nav header-right-menu">
                                                 <li class="nav-item">
                                                     <a href="#" data-toggle="dropdown" role="button"
                                                         aria-expanded="false" class="nav-link dropdown-toggle">
-                                                        <span class="admin-name">Welcome Student Name</span>
-                                                        <img src="../img/product/pro4.jpg" alt="" />
+                                                        <span class="admin-name">Welcome
+                                                            {{ auth()->user()->name }}</span>
+                                                        <img src="{{ asset('storage/' . auth()->user()->profile) }}"
+                                                            alt="" />
                                                     </a>
 
                                                 </li>
@@ -139,19 +132,72 @@
             <!-- Mobile Menu end -->
 
         </div>
+
         <!-- Static Table Start -->
         <div class="analytics-sparkle-area">
             <div class="container-fluid">
+
+                @if (session()->has('success'))
+                    <div class="alert alert-success text-center" role="alert">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @php
+                    use App\Models\Article;
+                    use App\Models\User;
+
+                    $contributionsCount = auth()->user()->articles()->count();
+                    $facultyId = auth()
+                        ->user()
+                        ->assignedRoles->where('user_id', auth()->user()->id)
+                        ->first()->faculty_id;
+
+                    $totalArticlesInFaculty = Article::whereHas('user', function ($query) use ($facultyId) {
+                        $query->whereHas('assignedRoles', function ($innerQuery) use ($facultyId) {
+                            $innerQuery->where('faculty_id', $facultyId);
+                        });
+                    })->count();
+
+                    $students = User::whereHas('assignedRoles', function ($query) use ($facultyId) {
+                        $query->where('faculty_id', $facultyId)->whereHas('role', function ($subQuery) {
+                            $subQuery->where('id', 4); // Assuming you want to match by role ID directly
+                            // Or if you want to match by role name
+                            // $subQuery->where('name', 'Student');
+                        });
+                    })->get();
+
+                    $studentsCount = $students->count();
+
+                    $uniqueContributorsCount = Article::whereHas('user', function ($query) use ($facultyId) {
+                        $query->whereHas('assignedRoles', function ($innerQuery) use ($facultyId) {
+                            $innerQuery->where('faculty_id', $facultyId);
+                        });
+                    })
+                        ->distinct('user_id')
+                        ->count('user_id');
+
+                    $userArticleCount = auth()->user()->articles()->count();
+                    $percentage = $totalArticlesInFaculty > 0 ? ($userArticleCount / $totalArticlesInFaculty) * 100 : 0;
+                    $percentageunit =
+                        $totalArticlesInFaculty > 0 ? ($uniqueContributorsCount / $studentsCount) * 100 : 0;
+                    $percentage = number_format($percentage, 0);
+                    $percentageunit = number_format($percentageunit, 0);
+
+                @endphp
+
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                         <div class="analytics-sparkle-line reso-mg-b-30">
                             <div class="analytics-content">
                                 <h5>Number of Contrbutions</h5>
-                                <h2>$<span class="counter">5000</span> <span class="tuition-fees"></span></h2>
-                                <span class="text-success">20%</span>
+                                <h2><span class="counter">{{ $contributionsCount }} units</span> <span
+                                        class="tuition-fees"></span></h2>
+                                <span class="text-success">{{ $percentage }}%</span>
                                 <div class="progress m-b-0">
                                     <div class="progress-bar progress-bar-success" role="progressbar"
-                                        aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:20%;">
+                                        aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                        style="width:{{ $percentage }}%;">
                                         <span class="sr-only">20% Complete</span>
                                     </div>
                                 </div>
@@ -162,11 +208,13 @@
                         <div class="analytics-sparkle-line reso-mg-b-30">
                             <div class="analytics-content">
                                 <h5>Percentage of Contributions</h5>
-                                <h2>$<span class="counter">3000</span> <span class="tuition-fees"></span></h2>
-                                <span class="text-danger">30%</span>
+                                <h2><span class="counter">{{ $percentage }}%</span> <span
+                                        class="tuition-fees"></span></h2>
+                                <span class="text-danger">{{ $percentage }}%</span>
                                 <div class="progress m-b-0">
                                     <div class="progress-bar progress-bar-danger" role="progressbar"
-                                        aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:30%;">
+                                        aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                        style="width:{{ $percentage }}%;">
                                         <span class="sr-only">230% Complete</span>
                                     </div>
                                 </div>
@@ -177,12 +225,14 @@
                         <div class="analytics-sparkle-line reso-mg-b-30 table-mg-t-pro dk-res-t-pro-30">
                             <div class="analytics-content">
                                 <h5>Number of Contributors</h5>
-                                <h2>$<span class="counter">2000</span> <span class="tuition-fees"></span></h2>
-                                <span class="text-info">60%</span>
+                                <h2><span class="counter">{{ $uniqueContributorsCount }} units</span> <span
+                                        class="tuition-fees"></span></h2>
+                                <span class="text-info">{{ $percentageunit }}%</span>
                                 <div class="progress m-b-0">
                                     <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="50"
-                                        aria-valuemin="0" aria-valuemax="100" style="width:60%;"> <span
-                                            class="sr-only">20% Complete</span> </div>
+                                        aria-valuemin="0" aria-valuemax="100" style="width:{{ $percentageunit }}%;">
+                                        <span class="sr-only">20% Complete</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -192,6 +242,7 @@
             </div>
         </div>
         <br>
+
         <div class="data-table-area mg-b-15">
             <div class="container-fluid">
                 <div class="row">
@@ -202,15 +253,37 @@
                                     <h1>Contribution <span class="table-project-n">Data</span> Table</h1>
                                 </div>
                             </div>
+                            @php
+                                // use App\Models\User;
+                                $list = request()->query('list') === 'selected';
+                                if ($list) {
+                                    // Handle the case when "Selected" is chosen
+                                    $articles = auth()->user()->articles()->where('is_selected', true)->get();
+                                }
+                            @endphp
+
+
+
                             <div class="sparkline13-graph">
                                 <form action="">
                                     <div class="datatable-dashv1-list custom-datatable-overright">
                                         <div id="toolbar">
-                                            <select class="form-control dt-tb">
-                                                <option value="">Export All</option>
-                                                <option value="all">Export Selected</option>
-                                                <option value="selected">Export Delayed Comment</option>
+                                            <select class="form-control dt-tb"
+                                                onchange="redirectToSelectedRoute(this)">
+                                                <option value="/dashboard">List All</option>
+                                                <option value="/dashboard?list=selected"
+                                                    {{ $list ? 'selected' : '' }}>
+                                                    Selected
+                                                </option>
                                             </select>
+
+                                            <script>
+                                                function redirectToSelectedRoute(select) {
+                                                    var selectedRoute = select.value;
+                                                    window.location.href = selectedRoute;
+                                                }
+                                            </script>
+
                                         </div>
                                         <table id="table" data-toggle="table" data-pagination="true"
                                             data-search="true" data-key-events="true" data-cookie-id-table="saveId"
@@ -226,129 +299,30 @@
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
+
+                                            @php
+                                                $i = 1;
+                                            @endphp
+
                                             <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Article</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td>Commented</td>
-                                                    <td>Selected</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td><button class="btn btn-custon-four btn-primary btn-xs"><a
-                                                                href="contribution-detail.php"
-                                                                style="color: white;">See More</a></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>Article</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td>Comment Delayed</td>
-                                                    <td>Selected</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td><button class="btn btn-custon-four btn-primary btn-xs"><a
-                                                                href="contribution-detail.php"
-                                                                style="color: white;">See More</a></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>Article</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td>Commented</td>
-                                                    <td>-</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td><button class="btn btn-custon-four btn-primary btn-xs"><a
-                                                                href="contribution-detail.php"
-                                                                style="color: white;">See More</a></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>4</td>
-                                                    <td>Article</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td>Commented</td>
-                                                    <td>-</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td><button class="btn btn-custon-four btn-primary btn-xs"><a
-                                                                href="contribution-detail.php"
-                                                                style="color: white;">See More</a></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>5</td>
-                                                    <td>Article</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td>Comment Delayed</td>
-                                                    <td>Selected</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td><button class="btn btn-custon-four btn-primary btn-xs"><a
-                                                                href="contribution-detail.php"
-                                                                style="color: white;">See More</a></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>6</td>
-                                                    <td>Article</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td>Commented</td>
-                                                    <td>-</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td><button class="btn btn-custon-four btn-primary btn-xs"><a
-                                                                href="contribution-detail.php"
-                                                                style="color: white;">See More</a></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>7</td>
-                                                    <td>Article</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td>Commented</td>
-                                                    <td>-</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td><button class="btn btn-custon-four btn-primary btn-xs"><a
-                                                                href="contribution-detail.php"
-                                                                style="color: white;">See More</a></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>8</td>
-                                                    <td>Article</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td>Commented</td>
-                                                    <td>-</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td><button class="btn btn-custon-four btn-primary btn-xs"><a
-                                                                href="contribution-detail.php"
-                                                                style="color: white;">See More</a></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>9</td>
-                                                    <td>Article</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td>Commented</td>
-                                                    <td>-</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td><button class="btn btn-custon-four btn-primary btn-xs"><a
-                                                                href="contribution-detail.php"
-                                                                style="color: white;">See More</a></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>10</td>
-                                                    <td>Article</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td>Commented</td>
-                                                    <td>-</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td><button class="btn btn-custon-four btn-primary btn-xs"><a
-                                                                href="contribution-detail.php"
-                                                                style="color: white;">See More</a></button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>11</td>
-                                                    <td>Article</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td>Commented</td>
-                                                    <td>-</td>
-                                                    <td>DD/MM/YYYY</td>
-                                                    <td><button class="btn btn-custon-four btn-primary btn-xs"><a
-                                                                href="contribution-detail.php"
-                                                                style="color: white;">See More</a></button></td>
-                                                </tr>
+                                                @foreach ($articles as $article)
+                                                    @php
+                                                        $canCheck = $article->comments->count() != 0;
+                                                    @endphp
+                                                    <tr>
+                                                        <td>{{ $i++ }}</td>
+                                                        <td>{{ $article->title }}</td>
+                                                        <td>{{ $article->created_at->format('d M Y') }}</td>
+                                                        <td> {{ $canCheck ? 'Commented' : 'No Comment' }} </td>
+                                                        <td> {{ $article->is_selected ? 'Selected' : '-' }}</td>
+                                                        <td>DD/MM/YYYY</td>
+                                                        <td><button class="btn btn-custon-four btn-primary btn-xs">
+                                                                <a href="/article-detail/{{ $article->id }}"
+                                                                    style="color: white;">See More</a></button></td>
+                                                    </tr>
+                                                @endforeach
                                             </tbody>
+
                                         </table>
                                     </div>
                                 </form>
@@ -358,18 +332,13 @@
                 </div>
             </div>
         </div>
-        <!-- Static Table End -->
-        <!-- <div class="footer-copyright-area">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <div class="footer-copy-right">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
+
+        <!-- Footer Start-->
+        @include('frontend.footer')
+
     </div>
+
+
 
     <!-- jquery
   ============================================ -->

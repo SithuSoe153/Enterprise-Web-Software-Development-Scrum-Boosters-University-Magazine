@@ -25,7 +25,6 @@ class AuthController extends Controller
     use HasApiTokens, HasFactory;
 
 
-
     public function dashboard(Request $request)
     {
         $guests = [];
@@ -102,6 +101,8 @@ class AuthController extends Controller
             })->whereHas('assignedRoles', function ($query) use ($facultyId) {
                 $query->where('faculty_id', $facultyId);
             })->get();
+
+            return view('frontend/Marketing Coordinator/coordinator-dashboard', compact('articles', 'faculties', 'mostActiveUsers', 'mostVisitedUrls', 'mostUsedBrowsers', 'guests'));
         }
 
         if ($user->hasRole(['Marketing Manager'])) {
@@ -111,7 +112,7 @@ class AuthController extends Controller
 
         if ($user->hasRole(['Student'])) {
             // Retrieve the student's own contributions (articles)
-            $articles = $user->articles;
+            $articles = $user->articles()->latest()->get();
 
             return view('frontend/Student/student-dashboard', compact('articles', 'faculties', 'mostActiveUsers', 'mostVisitedUrls', 'mostUsedBrowsers', 'guests'));
         }
@@ -140,7 +141,7 @@ class AuthController extends Controller
     {
 
         auth()->logout();
-        return redirect('/frontend/login')->with('success', 'Good Bye');
+        return redirect('/login')->with('success', 'Good Bye');
     }
 
 
@@ -205,8 +206,6 @@ class AuthController extends Controller
     public function login()
     {
         return view('frontend/Guest/guest-login');
-        // return view('frontend/login');
-        // return view('frontend/');
     }
 
 
@@ -215,7 +214,7 @@ class AuthController extends Controller
 
         // dd(Request()->all());
         $cleanData = Request()->validate([
-            'email' => ['required', 'email'],
+            'email' => ['required', 'email', Rule::exists('users', 'email')],
             'password' => ['required']
         ]);
 
@@ -243,14 +242,16 @@ class AuthController extends Controller
                 'browser' => $browserDescription,
             ]);
 
+            return redirect('/dashboard')->with('success', 'Welcome Back ' . auth()->user()->name)
+                ->withCookie(cookie('previousLogin', $previousLogin));
 
 
-            return redirect('/dashboard')->with([
-                'success', 'Welcome Back ' . auth()->user()->name,
-            ])
-                ->withCookie(cookie('previousLogin', $previousLogin));;
+            // return redirect('/dashboard')->with([
+            //     'success', 'Welcome Back ' . auth()->user()->name,
+            // ])
+            //     ->withCookie(cookie('previousLogin', $previousLogin));
 
-            // $token = auth()->user()->createToken('AuthToken')->plainTextToken;
+            // // $token = auth()->user()->createToken('AuthToken')->plainTextToken;
 
             // return response()->json(['token' => $token], 200);
 

@@ -21,22 +21,30 @@ class ArticleController extends Controller
 
     public function edit(Article $article)
     {
-        return view('article-edit', [
-            'article' => $article
-        ]);
+
+        return view('frontend/Student/contribution-edit', compact('article'));
+    }
+    public function mcEdit(Article $article)
+    {
+
+        return view('frontend/Marketing Coordinator/contribution-update', compact('article'));
     }
 
 
     public function update(Request $request, Article $article)
     {
+
         $request->validate([
             'title' => 'required|string|max:255',
+            'description' => 'string|max:1000',
             'articles.*' => 'nullable|mimes:doc,docx',
-            'images.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048' // Adjust the size as needed
+            'images.*' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Adjust the size as needed
+            'terms' => 'accepted' // Validation rule for the Terms checkbox
+
         ]);
 
         // Update the article's title
-        $article->update(['title' => $request->title]);
+        $article->update(['title' => $request->title, 'description' => $request->description]);
 
         // Handle article images if new images are provided
         if ($request->hasFile('images')) {
@@ -72,9 +80,13 @@ class ArticleController extends Controller
             }
         }
 
+        if (auth()->user()->hasRole(['Marketing Coordinator'])) {
 
+            return redirect('mc/article-detail/' . $article->id);
+        } else {
 
-        return redirect('/article-detail/' . $article->id);
+            return redirect('/article-detail/' . $article->id);
+        }
     }
 
 
@@ -97,8 +109,14 @@ class ArticleController extends Controller
     public function articleDetail(Article $article) // Type-hint the Article model
     {
         // dd($article);
-        return view('article-detail', compact('article'));
+        return view('frontend/Student/contribution-detail', compact('article'));
     }
+    public function mcArticleDetail(Article $article) // Type-hint the Article model
+    {
+        // dd($article);
+        return view('frontend/Marketing Coordinator/contribution-detail', compact('article'));
+    }
+
     public function toggleSelected(Article $article, Request $request) // Type-hint the Article model
     {
         // No need to find the article, it's already injected by Laravel due to route model binding
@@ -115,6 +133,7 @@ class ArticleController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
             'articles.*' => 'required|mimes:doc,docx',
             'images.*' => 'image|mimes:jpg,jpeg,png|max:2048', // Adjust the size as needed
             'terms' => 'accepted' // Validation rule for the Terms checkbox
@@ -133,6 +152,7 @@ class ArticleController extends Controller
         $article = $user->articles()->create([
             'magazine_id' => 1,
             'title' => $request->title,
+            'description' => $request->description,
             // Include other fields as necessary
         ]);
 
@@ -175,7 +195,7 @@ class ArticleController extends Controller
             }
         }
 
-        return redirect()->route('upload.success'); // Ensure you have this route defined
+        return redirect('/dashboard')->with('success', 'Your article submission was successful! Thank you for your contribution.'); // Ensure you have this route defined
     }
 
 
@@ -298,11 +318,16 @@ class ArticleController extends Controller
         $zipFileName = 'articles_' . now()->format('YmdHis') . '.zip';
         $zipPath = storage_path('app/public/' . $zipFileName);
 
-        if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
-            // Retrieve all articles with status 1
-            $articles = Article::where('is_selected', 1)->get();
 
-            foreach ($articles as $article) {
+
+        if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
+
+            if (request()->query('article')) {
+
+                $articleId = request()->query('article');
+                $article = Article::find($articleId);
+                // dd($articles);
+
                 $articleFolderPath = storage_path('app/public/articles/user' . $article->user_id . '_' . $article->created_at->format('YmdHis'));
 
                 $files = Storage::files('public/articles/user' . $article->user_id . '_' . $article->created_at->format('YmdHis'));
@@ -312,7 +337,23 @@ class ArticleController extends Controller
                     $relativePath = substr($file, strlen('public/'));
                     $zip->addFile(storage_path('app/' . $file), $relativePath);
                 }
+            } else {
+                // Retrieve all articles with status 1
+                $articles = Article::where('is_selected', 1)->get();
+                foreach ($articles as $article) {
+                    // dd($article);
+                    $articleFolderPath = storage_path('app/public/articles/user' . $article->user_id . '_' . $article->created_at->format('YmdHis'));
+
+                    $files = Storage::files('public/articles/user' . $article->user_id . '_' . $article->created_at->format('YmdHis'));
+
+                    foreach ($files as $file) {
+                        // Add files to zip
+                        $relativePath = substr($file, strlen('public/'));
+                        $zip->addFile(storage_path('app/' . $file), $relativePath);
+                    }
+                }
             }
+
 
             $zip->close();
 
@@ -322,6 +363,8 @@ class ArticleController extends Controller
             return redirect()->back()->with('error', 'Cannot create ZIP file.');
         }
     }
+
+
 
 
     // public function downloadZip()

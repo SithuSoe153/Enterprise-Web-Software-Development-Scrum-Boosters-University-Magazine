@@ -29,6 +29,7 @@ class CommentController extends Controller
 
     public function delete(Comment $comment)
     {
+
         $comment->where('id', $comment->id)->delete();
         return back();
     }

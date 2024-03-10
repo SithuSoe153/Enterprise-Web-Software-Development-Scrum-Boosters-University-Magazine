@@ -63,29 +63,41 @@ Route::get('/test-db', function () {
 });
 
 Route::middleware('auth-user')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/logout', [AuthController::class, 'logout']);
 
     Route::get('/dashboard', [AuthController::class, 'dashboard']);
-    Route::get('/submit-contributions', [AuthController::class, 'dashboard']);
-
-
-
-
-
-
-
+    Route::get('/submit-contributions', [UserController::class, 'submitContributions']);
+    Route::get('/contribution-newsfeed', [UserController::class, 'contributionNewsfeed']);
+    Route::get('/student-mail', [UserController::class, 'studentMail']);
+    Route::get('/student-profile', [UserController::class, 'studentProfile']);
 
 
     Route::get('/article-detail/{article}', [ArticleController::class, 'articleDetail']);
 
     Route::post('/article/{article}/comments', [CommentController::class, 'store']);
     Route::delete('/article/comment/delete/{comment}', [CommentController::class, 'delete']);
+
+
     Route::get('/article/{article}/edit', [ArticleController::class, 'edit']);
     Route::patch('/article/{article}/update', [ArticleController::class, 'update']);
+    Route::patch('/student/{profile}/update', [UserController::class, 'profileUpdate']);
+
+    Route::get('/mc/article/{article}/edit', [ArticleController::class, 'mcEdit']);
+    Route::get('/mc/article-detail/{article}', [ArticleController::class, 'mcArticleDetail']);
+    Route::patch('/mc/article/{article}/update', [ArticleController::class, 'update']);
+    Route::get('/coordinator-mail', [UserController::class, 'coordinatorMail']);
+    Route::get('/guest-list', [UserController::class, 'showGuest']);
+    Route::get('/coordinator-profile', [UserController::class, 'studentProfile']);
+
+
+
+
+    Route::post('/upload', [ArticleController::class, 'upload']);
+
+
 
     Route::get('/download-articles', [ArticleController::class, 'downloadArticlesZip']);
 
-    Route::post('/upload', [ArticleController::class, 'upload']);
 
     Route::post('/submit-form', [UserController::class, 'register']);
 

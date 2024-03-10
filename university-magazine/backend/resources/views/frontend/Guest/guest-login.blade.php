@@ -80,14 +80,22 @@
                             <div class="form-group">
                                 <label class="control-label" for="username">Email</label>
                                 <input type="text" placeholder="example@gmail.com" title="Please enter you username"
-                                    required="" value="" name="email" id="username" class="form-control">
+                                    required="" value="{{ old('email') }}" name="email" id="username"
+                                    class="form-control">
                                 <span class="help-block small">Your unique email to app</span>
+                                @error('email')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+
                             </div>
                             <div class="form-group">
                                 <label class="control-label" for="password">Password</label>
                                 <input type="password" title="Please enter your password" placeholder="******"
                                     required="" value="" name="password" id="password" class="form-control">
                                 <span class="help-block small">Yur strong password</span>
+                                @error('password')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="checkbox login-checkbox">
                                 <label>
