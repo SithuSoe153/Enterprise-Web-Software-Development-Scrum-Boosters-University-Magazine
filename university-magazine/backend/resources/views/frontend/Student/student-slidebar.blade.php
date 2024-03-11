@@ -17,7 +17,7 @@
 
                         @php
                             $closureDate = App\Models\Magazine::latest()->first()->closure_date;
-                            // @dd($closureDate)
+                            // @dd($closureDate);
                         @endphp
 
 

@@ -329,9 +329,10 @@
                                         $list = 'delayed';
                                         // Handle the case when "Delayed" is chosen
                                         $articles = Article::whereDoesntHave('comments') // Articles without comments
-                                            ->where('created_at', '<', Carbon::now()->subDays(14)) // And older than 14 days
+                                            ->where('created_at', '>', Carbon::now()->subDays(14)) // And older than 14 days
                                             ->get();
                                     }
+
                                 @endphp
 
 

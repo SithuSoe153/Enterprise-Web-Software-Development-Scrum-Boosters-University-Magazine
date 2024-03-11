@@ -183,7 +183,9 @@ class AuthController extends Controller
         $cleanData = request()->validate([
             'name' => 'required',
             'email' => ['required', Rule::unique('users', 'email')],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => [
+                'required', 'string', 'min:8', 'confirmed'
+            ],
             'faculty_id' => 'required|exists:faculties,id',
             'role' => 'required|numeric',
         ]);
@@ -234,56 +236,48 @@ class AuthController extends Controller
         return view('frontend/Guest/guest-login');
     }
 
-
     public function apiLogin()
     {
-
-        // dd(Request()->all());
+        // Validate the incoming request
         $cleanData = Request()->validate([
             'email' => ['required', 'email', Rule::exists('users', 'email')],
             'password' => ['required']
         ]);
 
+        // Attempt to retrieve the user by email
+        $user = User::where('email', $cleanData['email'])->first();
 
-        if (auth()->attempt($cleanData)) {
+        if ($user && Hash::check($cleanData['password'], $user->password)) {
+            // The user exists and the password is correct
 
-            $user = Auth::user();
+            Auth::login($user);
             $previousLogin = $user->last_login_at; // Store the previous login timestamp
             $user->last_login_at = now(); // Update last_login_at column with current timestamp
             $user->save();
 
-
             // Save the audit log entry to the database
-
             $userAgent = Request()->header('User-Agent');
             $browserInfo = new Parser($userAgent);
-
-            // Create a description of the browser
             $browserDescription = $browserInfo->toString(); // Example output: "Chrome 89 on Windows 10"
 
             AuditLog::create([
                 'user_id' => $user->id,
-                // 'url' => $request->fullUrl(),
                 'timestamp' => now(),
                 'browser' => $browserDescription,
             ]);
 
-            return redirect('/dashboard')->with('success', 'Welcome Back ' . auth()->user()->name)
+            return redirect('/dashboard')->with('success', 'Welcome Back ' . $user->name)
                 ->withCookie(cookie('previousLogin', $previousLogin));
-
-
-            // return redirect('/dashboard')->with([
-            //     'success', 'Welcome Back ' . auth()->user()->name,
-            // ])
-            //     ->withCookie(cookie('previousLogin', $previousLogin));
-
-            // // $token = auth()->user()->createToken('AuthToken')->plainTextToken;
-
-            // return response()->json(['token' => $token], 200);
-
+        } elseif ($user) {
+            // The user was found but the password does not match
+            return back()->withInput()->withErrors([
+                'password' => 'The provided password does not match our records.',
+            ]);
         } else {
-            return back()->withErrors([
-                'email' => 'Your Credentials is something wrong'
+            // This block is technically unnecessary due to the validation rule that checks the user's email exists
+            // Included for completeness and future flexibility
+            return back()->withInput()->withErrors([
+                'email' => 'The provided credentials do not match our records.',
             ]);
         }
     }

@@ -328,7 +328,9 @@ class ArticleController extends Controller
                 $article = Article::find($articleId);
                 // dd($articles);
 
+                // dd($articleId);
                 $articleFolderPath = storage_path('app/public/articles/user' . $article->user_id . '_' . $article->created_at->format('YmdHis'));
+
 
                 $files = Storage::files('public/articles/user' . $article->user_id . '_' . $article->created_at->format('YmdHis'));
 
@@ -363,6 +365,7 @@ class ArticleController extends Controller
             return redirect()->back()->with('error', 'Cannot create ZIP file.');
         }
     }
+
 
 
 

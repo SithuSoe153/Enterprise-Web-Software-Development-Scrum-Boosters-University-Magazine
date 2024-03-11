@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     libzip-dev \
     libpq-dev \
+    make \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath soap zip pdo_pgsql pgsql \
     && pecl install xdebug \
     && docker-php-ext-enable xdebug
@@ -25,6 +26,8 @@ COPY . .
 
 # Copy the example env file to .env, adjust this line according to your project structure if needed
 COPY .env.example .env
+
+# RUN sudo apt install make
 
 # Install Composer dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader

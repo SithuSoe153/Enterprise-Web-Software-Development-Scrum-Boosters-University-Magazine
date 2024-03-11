@@ -259,7 +259,8 @@
                                                 <div class="button-style-four btn-mg-b-10">
                                                     <a href="/article/{{ $article->id }}/edit"><button type="button"
                                                             class="col-lg-2 btn btn-custon-rounded-four btn-primary btn-spacing">Edit</button></a>
-                                                    <a href="/download-articles?article=single"><button type="button"
+                                                    <a href="/download-articles?article={{ $article->id }}"><button
+                                                            type="button"
                                                             class="col-lg-2 btn btn-custon-rounded-four btn-primary btn-spacing">Download</button></a>
                                                     {{--
                                                     <button type="button"
