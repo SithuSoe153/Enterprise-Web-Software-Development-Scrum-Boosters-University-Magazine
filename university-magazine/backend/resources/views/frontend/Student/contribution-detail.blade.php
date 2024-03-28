@@ -83,6 +83,12 @@
 
     @include('frontend/Student/student-slidebar')
 
+    @php
+        use App\Models\Magazine;
+        $cd = Magazine::latest()->get()->first()->closure_date;
+
+    @endphp
+
 
     <div class="all-content-wrapper">
         <div class="container-fluid">
@@ -176,7 +182,7 @@
                         </div>
                         <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
                             <div class="review-content-section col-sm-12">
-                                DD/MM/YYYY
+                                {{ $cd }}
                             </div>
                         </div>
 

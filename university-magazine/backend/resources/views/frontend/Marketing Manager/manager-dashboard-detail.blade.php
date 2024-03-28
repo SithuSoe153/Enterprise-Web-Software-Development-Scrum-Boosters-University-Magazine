@@ -90,6 +90,13 @@
 
     @include('frontend/Marketing Manager/manager-slidebar')
 
+
+    @php
+        use App\Models\Magazine;
+        $cd = Magazine::latest()->get()->first()->closure_date;
+
+    @endphp
+
     <div class="all-content-wrapper">
         <div class="container-fluid">
             <div class="row">
@@ -293,7 +300,7 @@
                                                         <td>{{ $article->created_at->format('d-M-Y') }}</td>
                                                         <td>{{ $article->user->name }}</td>
                                                         <td>{{ $article->user->email }}</td>
-                                                        <td>DD/MM/YYYY</td>
+                                                        <td>{{ $cd }}</td>
                                                         <td><button class="btn btn-custon-four btn-primary btn-xs">
                                                                 <a href="/mc/article-detail/{{ $article->id }}"
                                                                     style="color: white;">See More</a></button>

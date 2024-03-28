@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\RegisterMail;
 use App\Mail\SubmissionMail;
+use App\Models\Magazine;
 use ZipArchive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -131,13 +132,17 @@ class ArticleController extends Controller
 
     public function upload(Request $request)
     {
+
+        // dd($request->all());
+
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'articles.*' => 'required|mimes:doc,docx',
-            'images.*' => 'image|mimes:jpg,jpeg,png|max:2048', // Adjust the size as needed
+            'articles.*' => 'nullable|mimes:doc,docx',
+            'images.*' => 'nullable|mimes:jpg,jpeg,png|max:2048', // Adjust the size as needed
             'terms' => 'accepted' // Validation rule for the Terms checkbox
         ]);
+
 
         // Assuming you're manually managing the user authentication for now
         $user = auth()->user();
@@ -150,7 +155,7 @@ class ArticleController extends Controller
 
         // Store the article's Word documents and create the article record
         $article = $user->articles()->create([
-            'magazine_id' => 2,
+            'magazine_id' => Magazine::latest()->first()->id,
             'title' => $request->title,
             'description' => $request->description,
             // Include other fields as necessary

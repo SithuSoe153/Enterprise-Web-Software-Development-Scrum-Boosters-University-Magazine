@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Data Table | Kiaalap - Kiaalap Admin Template</title>
+    <title>Student Dashboard</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- favicon
@@ -73,29 +73,33 @@
   ============================================ -->
     <script src="../js/vendor/modernizr-2.8.3.min.js"></script>
 
+    <style>
+        #table th,
+        #table td {
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
 
-    @include('frontend/Student/student-slidebar')
 
-    @php
-        use App\Models\Magazine;
-        $cd = Magazine::latest()->get()->first()->closure_date;
+    @include('frontend/Guest/guest-slidebar')
 
-    @endphp
+
 
     <div class="all-content-wrapper">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <br>
-                    <br>
-                    <br>
-                    <br>
+                    <div class="logo-pro">
+                        <a href="index.php"><img class="main-logo" src="../img/scrumlogo.png" width="150px"
+                                alt="" /></a>
+                    </div>
                 </div>
             </div>
         </div>
+        <br>
         <div class="header-advance-area">
             <div class="header-top-area">
                 <div class="container-fluid">
@@ -103,24 +107,21 @@
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="header-top-wraper">
                                 <div class="row">
-
                                     <div class="col-lg-6 col-md-7 col-sm-6 col-xs-12">
                                         <div class="header-top-menu tabl-d-n">
 
                                         </div>
                                     </div>
-
-
                                     <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
                                         <div class="header-right-info">
                                             <ul class="nav navbar-nav mai-top-nav header-right-menu">
                                                 <li class="nav-item">
-                                                    <a href="#" data-toggle="dropdown" role="button"
-                                                        aria-expanded="false" class="nav-link dropdown-toggle">
+                                                    <a href="#" role="button" class="nav-link dropdown-toggle">
                                                         <span class="admin-name">Welcome
                                                             {{ auth()->user()->name }}</span>
-                                                        <img src="{{ asset('storage/' . auth()->user()->profile) }}"
-                                                            alt="" />
+                                                        <img
+                                                            src="{{ asset('storage/' . auth()->user()->profile) }}"alt="">
+
                                                     </a>
 
                                                 </li>
@@ -133,26 +134,73 @@
                     </div>
                 </div>
             </div>
+
+
+            @php
+
+                use App\Models\AssignedRole;
+                use App\Models\Faculty;
+
+                $facultyId = auth()
+                    ->user()
+                    ->assignedRoles->where('user_id', auth()->user()->id)
+                    ->first()->faculty_id;
+                // Find the Marketing Coordinator of the specified faculty
+                $marketingCoordinator = AssignedRole::where('faculty_id', $facultyId)
+                    ->where('role_id', 2) // Assuming 2 represents the Marketing Coordinator role
+                    ->first();
+                $facultyName = Faculty::find($facultyId)->name;
+
+            @endphp
+
+
+
             <!-- Mobile Menu start -->
             <!-- Mobile Menu end -->
+            <div class="breadcome-area">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
+                            @if (session()->has('success'))
+                                <br>
+                                <div class="alert alert-success text-center" role="alert">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+
+
+                            <div class="breadcome-list single-page-breadcome">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="breadcome-heading">
+                                            <h1 style="display: inline;"><small>Exploring Student Talent: A Statistical
+                                                    Review of University Magazine Submissions from</small></h1>
+                                            <h4 style="display: inline;"> {{ $facultyName }} </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
         <!-- Static Table Start -->
         <div class="analytics-sparkle-area">
             <div class="container-fluid">
 
-                @if (session()->has('success'))
-                    <div class="alert alert-success text-center" role="alert">
-                        {{ session('success') }}
-                    </div>
-                @endif
+
 
                 @php
                     use App\Models\Article;
                     use App\Models\User;
 
-                    $contributionsCount = auth()->user()->articles()->count();
+                    use App\Models\Magazine;
+                    $cd = Magazine::latest()->get()->first()->closure_date;
+
+                    $allcontributions = Article::all()->count();
+
                     $facultyId = auth()
                         ->user()
                         ->assignedRoles->where('user_id', auth()->user()->id)
@@ -162,7 +210,17 @@
                         $query->whereHas('assignedRoles', function ($innerQuery) use ($facultyId) {
                             $innerQuery->where('faculty_id', $facultyId);
                         });
+                    })
+                        ->where('is_selected', 1)
+                        ->count();
+
+                    $totalArticlesInFaculty0 = Article::whereHas('user', function ($query) use ($facultyId) {
+                        $query->whereHas('assignedRoles', function ($innerQuery) use ($facultyId) {
+                            $innerQuery->where('faculty_id', $facultyId);
+                        });
                     })->count();
+
+                    // echo $totalArticlesInFaculty;
 
                     $students = User::whereHas('assignedRoles', function ($query) use ($facultyId) {
                         $query->where('faculty_id', $facultyId)->whereHas('role', function ($subQuery) {
@@ -182,21 +240,22 @@
                         ->distinct('user_id')
                         ->count('user_id');
 
-                    $userArticleCount = auth()->user()->articles()->count();
-                    $percentage = $totalArticlesInFaculty > 0 ? ($userArticleCount / $totalArticlesInFaculty) * 100 : 0;
+                    // $userArticleCount = auth()->user()->articles()->count();
+                    $percentage =
+                        $totalArticlesInFaculty > 0 ? ($totalArticlesInFaculty / Faculty::all()->count()) * 100 : 0;
                     $percentageunit =
-                        $totalArticlesInFaculty > 0 ? ($uniqueContributorsCount / $studentsCount) * 100 : 0;
+                        $totalArticlesInFaculty0 > 0 ? ($uniqueContributorsCount / $studentsCount) * 100 : 0;
                     $percentage = number_format($percentage, 0);
                     $percentageunit = number_format($percentageunit, 0);
-
                 @endphp
+
 
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                         <div class="analytics-sparkle-line reso-mg-b-30">
                             <div class="analytics-content">
-                                <h5>Number of Contrbutions</h5>
-                                <h2><span class="counter">{{ $contributionsCount }} units</span> <span
+                                <h5>Number of Contrbutions in the Faculty</h5>
+                                <h2><span class="counter">{{ $totalArticlesInFaculty }} units</span> <span
                                         class="tuition-fees"></span></h2>
                                 <span class="text-success">{{ $percentage }}%</span>
                                 <div class="progress m-b-0">
@@ -212,7 +271,7 @@
                     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                         <div class="analytics-sparkle-line reso-mg-b-30">
                             <div class="analytics-content">
-                                <h5>Percentage of Contributions</h5>
+                                <h5>Percentage of Contributions in the Faculty</h5>
                                 <h2><span class="counter">{{ $percentage }}%</span> <span
                                         class="tuition-fees"></span></h2>
                                 <span class="text-danger">{{ $percentage }}%</span>
@@ -229,7 +288,7 @@
                     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                         <div class="analytics-sparkle-line reso-mg-b-30 table-mg-t-pro dk-res-t-pro-30">
                             <div class="analytics-content">
-                                <h5>Number of Contributors</h5>
+                                <h5>Number of Contributors in the Faculty</h5>
                                 <h2><span class="counter">{{ $uniqueContributorsCount }} units</span> <span
                                         class="tuition-fees"></span></h2>
                                 <span class="text-info">{{ $percentageunit }}%</span>
@@ -248,103 +307,172 @@
         </div>
         <br>
 
-        <div class="data-table-area mg-b-15">
+
+        <div class="breadcome-area">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <div class="sparkline13-list">
-                            <div class="sparkline13-hd">
-                                <div class="main-sparkline13-hd">
-                                    <h1>Contribution <span class="table-project-n">Data</span> Table</h1>
-                                </div>
-                            </div>
-                            @php
-                                // use App\Models\User;
-                                $list = request()->query('list') === 'selected';
-                                if ($list) {
-                                    // Handle the case when "Selected" is chosen
-                                    $articles = auth()->user()->articles()->where('is_selected', true)->get();
-                                }
-                            @endphp
-
-
-
-                            <div class="sparkline13-graph">
-                                <form action="">
-                                    <div class="datatable-dashv1-list custom-datatable-overright">
-                                        <div id="toolbar">
-                                            <select class="form-control dt-tb"
-                                                onchange="redirectToSelectedRoute(this)">
-                                                <option value="/dashboard">List All</option>
-                                                <option value="/dashboard?list=selected"
-                                                    {{ $list ? 'selected' : '' }}>
-                                                    Selected
-                                                </option>
-                                            </select>
-
-                                            <script>
-                                                function redirectToSelectedRoute(select) {
-                                                    var selectedRoute = select.value;
-                                                    window.location.href = selectedRoute;
-                                                }
-                                            </script>
-
-                                        </div>
-                                        <table id="table" data-toggle="table" data-pagination="true"
-                                            data-search="true" data-key-events="true" data-cookie-id-table="saveId"
-                                            data-toolbar="#toolbar">
-                                            <thead>
-                                                <tr>
-                                                    <th>No.</th>
-                                                    <th data-field="id">Article Title</th>
-                                                    <th>Submission Date</th>
-                                                    <th>Comment Status</th>
-                                                    <th>Publication Status</th>
-                                                    <th>Close Date</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-
-                                            @php
-                                                $i = 1;
-                                            @endphp
-
-                                            <tbody>
-                                                @foreach ($articles as $article)
-                                                    @php
-                                                        $canCheck = $article->comments->count() != 0;
-                                                    @endphp
-                                                    <tr>
-                                                        <td>{{ $i++ }}</td>
-                                                        <td>{{ $article->title }}</td>
-                                                        <td>{{ $article->created_at->format('d M Y') }}</td>
-                                                        <td> {{ $canCheck ? 'Commented' : 'No Comment' }} </td>
-                                                        <td> {{ $article->is_selected ? 'Selected' : '-' }}</td>
-                                                        <td>{{ $cd }}</td>
-                                                        <td>
-
-                                                            <button class="btn btn-custon-four btn-primary btn-xs">
-                                                                <a href="/article-detail/{{ $article->id }}"
-                                                                    style="color: white;">See More</a></button>
-
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-
-                                        </table>
-                                    </div>
-                                </form>
-                            </div>
+                        <!-- <div class="breadcome-list single-page-breadcome"> -->
+                        <!-- <div class="row"> -->
+                        <div class="col-lg-12 col-md-6 col-sm-6 col-xs-12">
+                            <!-- <div class="breadcome-heading"> -->
+                            <small>
+                                <h1>Coordinator's Pick: Selected Contributions from {{ $facultyName }}</h1>
+                            </small>
+                            <!-- </div> -->
                         </div>
+                        <!-- </div> -->
+                        <!-- </div> -->
                     </div>
                 </div>
+
+
+                @foreach ($articles as $article)
+                    <div class="mb-5">
+
+
+                        <form action="">
+                            <div class="col-lg-12 col-md-8 col-sm-8 col-xs-12">
+                                <div class="product-payment-inner-st res-mg-t-30 analysis-progrebar-ctn">
+                                    <div class="single-review-st-item res-mg-t-30 table-mg-t-pro-n">
+                                        <div class="single-review-st-text">
+                                            <img src="{{ asset('storage/' . $article->user->profile) }}"
+                                                width="40px" alt="">
+                                            <div class="review-ctn-hf">
+                                                <h3 class="col-lg-12">{{ $article->user->name }}</h3>
+                                                <p class="col-lg-2">
+                                                    {{ $article->user->assignedRoles->first()->faculty->name }}
+
+                                                </p>
+                                                <li class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
+                                                    {{ $article->created_at->diffForHumans() }}</li>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ul class="text-left main-sparkline12-hd col-xs-12">
+                                        <h1></h1>
+                                    </ul>
+                                    <ul class=" main-sparkline12-hd col-sm-8">
+                                        <h1>Description</h1>
+                                    </ul>
+                                    <div id="myTabContent" class="tab-content custom-product-edit st-prf-pro">
+                                        <div class="row">
+
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="review-content-section col-sm-12">
+
+                                                    <p>{{ $article->description }}</p>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="review-content-section col-sm-12">
+                                                    <h5>Final Closure Date</h5>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="review-content-section col-sm-12">
+                                                    {{ $cd }}
+                                                </div>
+                                            </div>
+
+                                            {{-- Start --}}
+
+                                            @foreach ($article->files as $file)
+                                                @php
+                                                    // Replace 'public/' with 'storage/' in the file path
+                                                    $filePath = str_replace('public/', 'storage/', $file->file_path);
+                                                @endphp
+
+                                                @if (Str::endsWith($file->file_path, ['.doc', '.docx']))
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <div class="review-content-section col-sm-12">
+                                                            <a href="{{ asset($filePath) }}"
+                                                                class="col-lg-4 col-md-12 col-sm-12 col-xs-12 btn btn-custon-four btn-primary btn-lg">
+                                                                <i class="fa fa-file-word-o" style="font-size:18px">
+                                                                    <span>Contribution file as a Word
+                                                                        Document</span></i></a>
+                                                        </div>
+                                                    </div>
+                                                @endif
+
+                                                {{-- Check if the file is a .doc or .docx and skip it --}}
+                                                {{-- @if (Str::endsWith($file->file_path, ['.doc', '.docx']))
+                            @continue
+                        @endif --}}
+                                            @endforeach
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12 col-md-8 col-sm-8 col-xs-12">
+                                <div class="product-payment-inner-st res-mg-t-30 analysis-progrebar-ctn">
+                                    <ul class="main-sparkline12-hd col-sm-8">
+                                        <h1>Attached Photos</h1>
+                                    </ul>
+                                    <div id="myTabContent" class="tab-content custom-product-edit st-prf-pro">
+                                        <div class="row">
+
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <!-- <div class="review-content-section" cellspacing="5" cellpadding="5"> -->
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <div class="col-lg-12 custom-pro-edt-ds">
+                                                            <div class="review-content-section">
+                                                                @foreach ($article->files as $file)
+                                                                    @php
+                                                                        // Replace 'public/' with 'storage/' in the file path
+                                                                        $filePath = str_replace(
+                                                                            'public/',
+                                                                            'storage/',
+                                                                            $file->file_path,
+                                                                        );
+                                                                    @endphp
+
+                                                                    {{-- Check if the file is a .doc or .docx and skip it --}}
+                                                                    @if (Str::endsWith($file->file_path, ['.doc', '.docx']))
+                                                                        @continue
+                                                                    @endif
+
+                                                                    {{-- Display image --}}
+
+                                                                    <img class="main-logo btn-spacing"
+                                                                        src="{{ asset($filePath) }}"
+                                                                        width="250px" />
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-5">
+                                    <br>
+                                </div>
+
+                            </div>
+                        </form>
+
+
+
+                    </div>
+                @endforeach
+
+
+
             </div>
         </div>
+        <br>
 
-        <!-- Footer Start-->
+
+
         @include('frontend.footer')
-
     </div>
 
 

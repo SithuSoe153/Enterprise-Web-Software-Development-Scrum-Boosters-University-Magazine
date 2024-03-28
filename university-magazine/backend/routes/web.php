@@ -91,15 +91,39 @@ Route::middleware('auth-user')->group(function () {
 
     Route::get('/manager-profile', [UserController::class, 'studentProfile']);
 
+    Route::get('/guest-profile', [UserController::class, 'studentProfile']);
+    Route::get('/admin-profile', [UserController::class, 'studentProfile']);
+    Route::patch('/guest/{profile}/update', [UserController::class, 'guestProfileUpdate']);
+
 
 
     Route::post('/upload', [ArticleController::class, 'upload']);
 
 
-
     Route::get('/download-articles', [ArticleController::class, 'downloadArticlesZip']);
 
 
+    Route::get('/user-list', function () {
+        return view('frontend/Admin/user-list');
+    });
+    Route::get('/magazine', function () {
+        return view('frontend/Admin/magazine');
+    });
+
+    Route::get('/magazine-profile/{magazine}', [MagazineController::class, 'profile']);
+    Route::patch('/magazine-profile/{magazine}/update', [MagazineController::class, 'profileUpdate']);
+    Route::delete('/magazine/{magazine}/destroy', [MagazineController::class, 'destroyMagazine']);
+
+
+
+
+    Route::get('/user-enroll', function () {
+        return view('frontend/Admin/user-enroll');
+    });
+
+    Route::get('/user-profile/{user}',  [UserController::class, 'userProfile']);
+    Route::delete('/user/{user}/destroy', [UserController::class, 'destroyUser']);
+    Route::patch('/user/{user}/update', [UserController::class, 'adminProfileUpdate']);
     Route::post('/submit-form', [UserController::class, 'register']);
 
     Route::post('/magazine/store', [MagazineController::class, 'store']);

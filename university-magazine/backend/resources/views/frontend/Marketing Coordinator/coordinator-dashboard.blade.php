@@ -93,6 +93,11 @@
 
     @include('frontend/Marketing Coordinator/coordinator-slidebar')
 
+    @php
+        use App\Models\Magazine;
+        $cd = Magazine::latest()->get()->first()->closure_date;
+
+    @endphp
 
     <div class="all-content-wrapper">
         <div class="container-fluid">
@@ -232,7 +237,8 @@
                         ->count('user_id');
 
                     // $userArticleCount = auth()->user()->articles()->count();
-                    $percentage = $allcontributions > 0 ? ($allcontributions / Faculty::all()->count()) * 100 : 0;
+                    $percentage =
+                        $totalArticlesInFaculty > 0 ? ($totalArticlesInFaculty / Faculty::all()->count()) * 100 : 0;
                     $percentageunit =
                         $totalArticlesInFaculty > 0 ? ($uniqueContributorsCount / $studentsCount) * 100 : 0;
                     $percentage = number_format($percentage, 0);
@@ -247,7 +253,7 @@
                         <div class="analytics-sparkle-line reso-mg-b-30">
                             <div class="analytics-content">
                                 <h5>Number of Contrbutions</h5>
-                                <h2><span class="counter">{{ $allcontributions }} units</span> <span
+                                <h2><span class="counter">{{ $totalArticlesInFaculty }} units</span> <span
                                         class="tuition-fees"></span></h2>
                                 <span class="text-success">{{ $percentage }}%</span>
                                 <div class="progress m-b-0">
@@ -329,8 +335,10 @@
                                         $list = 'delayed';
                                         // Handle the case when "Delayed" is chosen
                                         $articles = Article::whereDoesntHave('comments') // Articles without comments
-                                            ->where('created_at', '>', Carbon::now()->subDays(14)) // And older than 14 days
+                                            ->where('created_at', '<', Carbon::now()->subDays(14)) // And older than 14 days
                                             ->get();
+
+                                        // @dd($articles);
                                     }
 
                                 @endphp
@@ -401,6 +409,11 @@
                                                             $createdDate = \Carbon\Carbon::parse($article->created_at);
                                                             $isDelayed =
                                                                 $createdDate->diffInDays(\Carbon\Carbon::now()) > 14;
+                                                            // $article->where(
+                                                            //     'created_at',
+                                                            //     '<',
+                                                            //     Carbon::now()->subDays(14),
+                                                            // ); // And older than 14 days
                                                         @endphp
                                                         <tr>
                                                             <td><input {{ $article->is_selected ? 'checked' : '' }}
@@ -413,8 +426,9 @@
                                                             <td>{{ $article->created_at->format('d-M-Y') }}</td>
                                                             <td>{{ $article->user->name }}</td>
                                                             <td>{{ $article->user->email }}</td>
-                                                            <td>DD/MM/YYYY</td>
+                                                            <td>{{ $cd }}</td>
                                                             <td>
+                                                                {{-- @dd($isDelayed) --}}
                                                                 @if ($noComments && $isDelayed)
                                                                     Delayed Comment
                                                                 @elseif($noComments)

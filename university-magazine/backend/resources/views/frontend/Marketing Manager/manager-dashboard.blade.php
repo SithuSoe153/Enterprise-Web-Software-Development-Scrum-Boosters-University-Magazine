@@ -131,6 +131,8 @@
             @endif
         </div>
 
+
+
         <!-- Single pro tab review Start-->
         <div class="single-pro-review-area mt-t-30 mg-b-15">
 
@@ -247,16 +249,20 @@
                                     <h2><small><b>{{ $faculty->name }}</b> </small></h2>
 
                                     @php
-                                        $user = App\Models\User::whereHas('assignedRoles', function ($user) use (
+                                        $users = App\Models\User::whereHas('assignedRoles', function ($query) use (
                                             $faculty,
                                         ) {
-                                            $user->where('faculty_id', $faculty->id)->where('role_id', 2);
+                                            $query->where('faculty_id', $faculty->id)->where('role_id', 2);
                                         })->get();
-
                                     @endphp
 
-                                    <h3><small><b>Marketing Coordinator</b><span> -
-                                            </span><span>{{ $user[0]->name }}</span></small></h3>
+                                    @if ($users->isNotEmpty())
+                                        <h3><small><b>Marketing Coordinator</b><span> -
+                                                </span><span>{{ $users[0]->name }}</span></small></h3>
+                                    @else
+                                        <p>No user found.</p>
+                                    @endif
+
                                     <div>
                                         <b hidden> </b> <br>
                                     </div>

@@ -69,23 +69,7 @@
 
 <body>
 
-    @hasRole(['Marketing Manager'])
-        @include('frontend/Marketing Manager/manager-slidebar')
-    @endhasRole
-    @hasRole(['Marketing Coordinator'])
-        @include('frontend/Marketing Coordinator/coordinator-slidebar')
-    @endhasRole
-    @hasRole(['Student'])
-        @include('frontend/Student/student-slidebar')
-    @endhasRole
-    @hasRole(['Guest'])
-        @include('frontend/Guest/guest-slidebar')
-    @endhasRole
-    @hasRole(['Admin'])
-        @include('frontend/Admin/admin-slidebar')
-    @endhasRole
-
-
+    @include('frontend/Admin/admin-slidebar')
 
     <div class="all-content-wrapper">
         <div class="container-fluid">
@@ -139,7 +123,7 @@
             </div>
         @endif
 
-        <form action="/student/{{ auth()->user()->id }}/update" method="POST" enctype="multipart/form-data">
+        <form action="/user/{{ $user->id }}/update" method="POST" enctype="multipart/form-data">
             @csrf
             @method('patch')
             <!-- Single pro tab review Start-->
@@ -153,15 +137,9 @@
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="col-lg-7 col-md-6 col-sm-6 col-xs-12">
-                                            <h1>Profile Settings: Manage Your Information</h1>
+                                            <h1>User Profile Settings: Manage User Information</h1>
                                         </div>
-                                        <div class="col-lg-5 col-md-6 col-sm-6 col-xs-12">
-                                            <h1><small><span>Your Last Login: <span>
-                                                            {{ request()->cookie('previousLogin') }}</span> |
-                                                        <span>
-                                                            {{ \Carbon\Carbon::parse(request()->cookie('previousLogin'))->diffForHumans() }}</span>
-                                                    </span></small></h1>
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -173,20 +151,18 @@
 
                             <div class="profile-info-inner">
                                 <!-- <ul id="myTabedu1" class="tab-review-design"> -->
-                                <h3>Your Profile</h3>
+                                <h3>User Profile</h3>
                                 <!-- </ul> -->
                                 <div class="text-left">
-                                    <img src="{{ asset('storage/' . auth()->user()->profile) }}" width="310px"
-                                        alt="" />
+                                    <img src="{{ asset('storage/' . $user->profile) }}" width="310px" alt="" />
 
                                 </div>
 
                                 @php
                                     use App\Models\Faculty;
-                                    $facultyId = auth()
-                                        ->user()
-                                        ->assignedRoles->where('user_id', auth()->user()->id)
-                                        ->first()->faculty_id;
+
+                                    $facultyId = $user->assignedRoles->where('user_id', $user->id)->first()->faculty_id;
+
                                     if ($facultyId !== null) {
                                         $facultyName = Faculty::find($facultyId)->name;
                                     }
@@ -197,11 +173,11 @@
                                 <div class="profile-details-hr">
                                     <div class="text-left">
                                         <div>
-                                            <b>Student Name: </b> {{ auth()->user()->name }}<br>
-                                            @if (!auth()->user()->hasRole(['Marketing Manager', 'Admin']))
+                                            <b>Student Name: </b> {{ $user->name }}<br>
+                                            @if (!$user->hasRole(['Marketing Manager', 'Admin']))
                                                 <b>Faculty Name: </b> {{ $facultyName }}<br>
                                             @endif
-                                            <b>Email Address: </b>{{ auth()->user()->email }} <br>
+                                            <b>Email Address: </b>{{ $user->email }} <br>
                                         </div>
                                     </div>
                                 </div>
@@ -210,33 +186,18 @@
                         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                             <div class="product-payment-inner-st res-mg-t-30 analysis-progrebar-ctn">
                                 <ul id="myTabedu1" class="tab-review-design">
-                                    <h1><small><b>Update Details</b></small> </h1>
+                                    <h1><small><b>Reset User Password</b></small> </h1>
                                 </ul>
                                 <div id="myTabContent" class="tab-content custom-product-edit st-prf-pro">
                                     <div class="row">
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <div class="review-content-section">
                                                 <div class="row">
-                                                    <div class="form-group col-lg-12 ">
-                                                        <input type="text" name="name" class="form-control"
-                                                            placeholder="Student Name"
-                                                            value="{{ old('name', auth()->user()->name) }}">
-                                                        @error('name')
-                                                            <p class="text-danger">{{ $message }}</p>
-                                                        @enderror
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <input type="text" class="form-control"
-                                                                name="old_password" placeholder="Old Password">
-                                                        </div>
 
-                                                        @error('old_password')
-                                                            <p class="text-danger">{{ $message }}</p>
-                                                        @enderror
-                                                    </div>
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-12">
                                                         <div class="form-group">
+                                                            {{-- <input type="text" value="{{ $user->name }}" hidden
+                                                                name="name"> --}}
                                                             <input type="text" class="form-control"
                                                                 name="password" placeholder="Enter New Password">
                                                             @error('password')
@@ -244,27 +205,12 @@
                                                             @enderror
                                                         </div>
                                                     </div>
+
                                                     {{-- <div class="form-group col-lg-12 ">
                                                     <input type="number" class="form-control"
                                                         placeholder="Phone no.">
                                                 </div> --}}
-                                                    <div class="form-group col-lg-12 ">
-                                                        <div class="file-upload-inner ts-forms">
-                                                            <div class="input prepend-big-btn">
-                                                                <label class="icon-right" for="prepend-big-btn">
-                                                                    <i class="fa fa-download"></i>
-                                                                </label>
-                                                                <div class="file-button">
-                                                                    Browse
-                                                                    <input type="file" name="profile"
-                                                                        accept="image/*"
-                                                                        onchange="document.getElementById('prepend-big-btn').value = this.value;">
-                                                                </div>
-                                                                <input type="text" id="prepend-big-btn"
-                                                                    placeholder="no file selected">
-                                                            </div>
-                                                        </div>
-                                                    </div>
+
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-lg-12">
@@ -272,7 +218,7 @@
                                                             <button type="submit"
                                                                 class="btn btn-custon-four btn-primary">
                                                                 <i class="fa fa-check edu-checked-pro"
-                                                                    aria-hidden="true"></i> Save Changes</button>
+                                                                    aria-hidden="true"></i> Reset </button>
                                                             <button type="reset"
                                                                 class="btn btn-custon-four btn-danger">
                                                                 <i class="fa fa-times edu-danger-error"

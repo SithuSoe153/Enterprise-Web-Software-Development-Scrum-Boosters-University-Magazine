@@ -48,6 +48,7 @@ class AuthController extends Controller
         // Check if the user is a Marketing Coordinator
         if ($user->hasRole(['Admin'])) {
 
+            $magazines = Magazine::all();
 
             // Find the most used browser
 
@@ -81,6 +82,9 @@ class AuthController extends Controller
                 ->orderByDesc('visit_count')
                 ->limit(3)
                 ->get();
+
+
+            return view('frontend/Admin/admin-dashboard', compact('articles', 'faculties', 'mostActiveUsers', 'mostVisitedUrls', 'mostUsedBrowsers', 'guests', 'magazines'));
         }
 
 
@@ -153,7 +157,9 @@ class AuthController extends Controller
                 $query->whereHas('assignedRoles', function ($query) use ($facultyId) {
                     $query->where('faculty_id', $facultyId);
                 });
-            })->where('is_selected', 1)->get();
+            })->where('is_selected', 1)->latest()->get();
+
+            return view('frontend/Guest/guest-dashboard', compact('articles', 'faculties', 'mostActiveUsers', 'mostVisitedUrls', 'mostUsedBrowsers', 'guests'));
         }
 
 

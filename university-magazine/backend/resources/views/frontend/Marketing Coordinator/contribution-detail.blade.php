@@ -81,6 +81,11 @@
 
     @include('frontend/Marketing Coordinator/coordinator-slidebar')
 
+    @php
+        use App\Models\Magazine;
+        $cd = Magazine::latest()->get()->first()->closure_date;
+
+    @endphp
 
     <div class="all-content-wrapper">
         <div class="container-fluid">
@@ -145,7 +150,7 @@
                             </div>
                             <div class="review-content-section col-sm-12">
                                 <h1><small>Final Closure Date</small><small><b><b> -
-                                            </b></b></small><small>DD/MM/YYYY</small></h1>
+                                            </b></b></small><small>{{ $cd }}</small></h1>
                             </div>
                         </div>
                     </div>
