@@ -155,7 +155,8 @@ class ArticleController extends Controller
 
         // Store the article's Word documents and create the article record
         $article = $user->articles()->create([
-            'magazine_id' => Magazine::latest()->first()->id,
+            // 'magazine_id' => Magazine::latest()->first()->id,
+            'magazine_id' => 2,
             'title' => $request->title,
             'description' => $request->description,
             // Include other fields as necessary

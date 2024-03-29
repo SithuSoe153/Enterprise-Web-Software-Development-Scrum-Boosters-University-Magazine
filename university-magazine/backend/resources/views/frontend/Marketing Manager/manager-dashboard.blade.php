@@ -140,7 +140,155 @@
                 <div class="container-fluid">
 
 
+
+
+                    <div class="analytics-sparkle-area">
+                        <div class="container-fluid">
+                            <div class="row">
+
+                                {{-- Chart --}}
+                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="analytics-sparkle-line reso-mg-b-30">
+                                        <div class="analytics-content">
+                                            <h5>Number of Contrbutions within
+                                                {{-- <span>({{ $faculty->name }})</span>  --}}
+                                                for
+                                                each academic
+                                                year
+                                            </h5>
+
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+
+                                            <div id="line2-chart">
+                                                <canvas id="barchart1"></canvas>
+                                            </div>
+
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="analytics-sparkle-line reso-mg-b-30">
+                                        <div class="analytics-content">
+                                            <h5>Percentage of Contributions within
+                                                {{-- <span>({{ $faculty->name }})</span> --}}
+
+                                                for each
+                                                academic
+                                                year
+                                            </h5>
+                                            {{-- <div id="pie-chart">
+                                                <small></small> <canvas id="piechart"></canvas>
+                                            </div> --}}
+
+
+                                            <div id="pie-chart">
+                                                <small></small>
+                                                <canvas id="piechart"></canvas>
+                                            </div>
+
+
+
+                                            <script>
+                                                document.addEventListener("DOMContentLoaded", function() {
+                                                    var ctx = document.getElementById("piechart").getContext('2d');
+                                                    var customPieChart = new Chart(ctx, {
+                                                        type: 'pie', // Change this to 'doughnut' if you prefer a doughnut chart.
+                                                        data: {
+                                                            labels: ["lee lee", "lar lar", "Grapes", "Bananas", "Peaches"],
+                                                            datasets: [{
+                                                                label: "Fruits",
+                                                                data: [12, 19, 3, 5, 2, 3],
+                                                                backgroundColor: [
+                                                                    'rgba(255, 99, 132, 0.2)',
+                                                                    'rgba(54, 162, 235, 0.2)',
+                                                                    'rgba(255, 206, 86, 0.2)',
+                                                                    'rgba(75, 192, 192, 0.2)',
+                                                                    'rgba(153, 102, 255, 0.2)',
+                                                                ],
+                                                                borderColor: [
+                                                                    'rgba(255,99,132,1)',
+                                                                    'rgba(54, 162, 235, 1)',
+                                                                    'rgba(255, 206, 86, 1)',
+                                                                    'rgba(75, 192, 192, 1)',
+                                                                    'rgba(153, 102, 255, 1)',
+                                                                ],
+                                                                borderWidth: 1
+                                                            }]
+                                                        },
+                                                        options: {
+                                                            responsive: true,
+                                                            legend: {
+                                                                position: 'top',
+                                                            },
+                                                            title: {
+                                                                display: true,
+                                                                text: 'Fruit Consumption'
+                                                            },
+                                                            animation: {
+                                                                animateScale: true,
+                                                                animateRotate: true
+                                                            }
+                                                        }
+                                                    });
+                                                });
+                                            </script>
+
+
+                                            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="analytics-sparkle-line reso-mg-b-30">
+                                        <div class="analytics-content">
+                                            <h5>Number of contributors within
+                                                {{-- <span>({{ $faculty->name }})</span> --}}
+                                                for
+                                                each academic
+                                                year
+                                            </h5>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <div id="line2-chart">
+                                                <canvas id="barchart2"></canvas>
+                                            </div>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
                     <div class="row">
+                        <br>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="col-lg-12 col-md-6 col-sm-6 col-xs-12">
                                 <h1>Download University Magazines</h1>
@@ -332,6 +480,34 @@
         <!-- main JS
   ============================================ -->
         <script src="../js/main.js"></script>
+
+
+        {{-- New Add --}}
+
+        <!-- Chart JS
+  ============================================ -->
+        <script src="../js/chart/jquery.peity.min.js"></script>
+        <script src="../js/peity/peity-active.js"></script>
+
+        <!-- Charts JS
+============================================ -->
+        <script src="../js/charts/Chart.js"></script>
+        <script src="../js/charts/bar-chart.js"></script>
+
+        <!-- tab JS
+============================================ -->
+        <script src="../js/tab.js"></script>
+        <!-- plugins JS
+============================================ -->
+        <script src="../js/plugins.js"></script>
+        <!-- main JS
+============================================ -->
+        <script src="../js/main.js"></script>
+
+        {{-- <script src="../js/charts/Chart.js"></script> --}}
+        {{-- <script src="../js/charts/rounded-chart.js"></script> --}}
+
+
 </body>
 
 </html>

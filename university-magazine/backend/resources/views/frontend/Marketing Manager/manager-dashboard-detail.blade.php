@@ -167,76 +167,114 @@
             </div>
         </div>
         <!-- Static Table Start -->
-        <div class="analytics-sparkle-area">
+
+
+        @php
+            use App\Models\Article;
+            use App\Models\User;
+
+            $allcontributions = Article::all()->count();
+
+            $facultyId = auth()
+                ->user()
+                ->assignedRoles->where('user_id', auth()->user()->id)
+                ->first()->faculty_id;
+
+            $totalArticlesInFaculty = Article::whereHas('user', function ($query) use ($facultyId) {
+                $query->whereHas('assignedRoles', function ($innerQuery) use ($facultyId) {
+                    $innerQuery->where('faculty_id', $facultyId);
+                });
+            })->count();
+
+            // echo $totalArticlesInFaculty;
+
+            $students = User::whereHas('assignedRoles', function ($query) use ($facultyId) {
+                $query->where('faculty_id', $facultyId)->whereHas('role', function ($subQuery) {
+                    $subQuery->where('id', 4); // Assuming you want to match by role ID directly
+                    // Or if you want to match by role name
+                    // $subQuery->where('name', 'Student');
+                });
+            })->get();
+
+            $studentsCount = $students->count();
+
+            $uniqueContributorsCount = Article::whereHas('user', function ($query) use ($facultyId) {
+                $query->whereHas('assignedRoles', function ($innerQuery) use ($facultyId) {
+                    $innerQuery->where('faculty_id', $facultyId);
+                });
+            })
+                ->distinct('user_id')
+                ->count('user_id');
+
+            // $userArticleCount = auth()->user()->articles()->count();
+            $percentage = $totalArticlesInFaculty > 0 ? ($totalArticlesInFaculty / Faculty::all()->count()) * 100 : 0;
+            $percentageunit = $totalArticlesInFaculty > 0 ? ($uniqueContributorsCount / $studentsCount) * 100 : 0;
+            $percentage = number_format($percentage, 0);
+            $percentageunit = number_format($percentageunit, 0);
+        @endphp
+
+
+
+
+        <div class="breadcome-area">
             <div class="container-fluid">
+
+
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                         <div class="analytics-sparkle-line reso-mg-b-30">
                             <div class="analytics-content">
-                                <h5>Number of Contrbutions within <span>({{ $faculty->name }})</span> for each academic
-                                    year
-                                </h5>
-
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-
-                                <div id="line2-chart">
-                                    <canvas id="barchart1"></canvas>
+                                <h5>Number of Contrbutions</h5>
+                                <h2><span class="counter">{{ $totalArticlesInFaculty }} units</span> <span
+                                        class="tuition-fees"></span></h2>
+                                <span class="text-success">{{ $percentage }}%</span>
+                                <div class="progress m-b-0">
+                                    <div class="progress-bar progress-bar-success" role="progressbar"
+                                        aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                        style="width:{{ $percentage }}%;">
+                                        <span class="sr-only">20% Complete</span>
+                                    </div>
                                 </div>
-
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-
-
-
-
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                         <div class="analytics-sparkle-line reso-mg-b-30">
                             <div class="analytics-content">
-                                <h5>Percentage of Contributions within <span>({{ $faculty->name }})</span> for each
-                                    academic
-                                    year</h5>
-                                <div id="pie-chart">
-                                    <small></small> <canvas id="piechart"></canvas>
+                                <h5>Percentage of Contributions</h5>
+                                <h2><span class="counter">{{ $percentage }}%</span> <span
+                                        class="tuition-fees"></span></h2>
+                                <span class="text-danger">{{ $percentage }}%</span>
+                                <div class="progress m-b-0">
+                                    <div class="progress-bar progress-bar-danger" role="progressbar"
+                                        aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"
+                                        style="width:{{ $percentage }}%;">
+                                        <span class="sr-only">230% Complete</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                        <div class="analytics-sparkle-line reso-mg-b-30 table-mg-t-pro dk-res-t-pro-30">
+                            <div class="analytics-content">
+                                <h5>Number of Contributors</h5>
+                                <h2><span class="counter">{{ $uniqueContributorsCount }} units</span> <span
+                                        class="tuition-fees"></span></h2>
+                                <span class="text-info">{{ $percentageunit }}%</span>
+                                <div class="progress m-b-0">
+                                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="50"
+                                        aria-valuemin="0" aria-valuemax="100" style="width:{{ $percentageunit }}%;">
+                                        <span class="sr-only">20% Complete</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                        <div class="analytics-sparkle-line reso-mg-b-30">
-                            <div class="analytics-content">
-                                <h5>Number of contributors within <span>({{ $faculty->name }})</span> for each academic
-                                    year
-                                </h5>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                                <div id="line2-chart">
-                                    <canvas id="barchart2"></canvas>
-                                </div>
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
-
-
 
         <br>
         <p>
