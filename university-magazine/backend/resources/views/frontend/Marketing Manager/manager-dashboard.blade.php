@@ -108,8 +108,8 @@
                                                     <a href="#" role="button" class="nav-link dropdown-toggle">
                                                         <span class="admin-name">Welcome
                                                             {{ auth()->user()->name }}</span>
-                                                        <img
-                                                            src="{{ asset('storage/' . auth()->user()->profile) }}"alt="">
+                                                        <img src="{{ asset('storage/' . auth()->user()->profile) }}"
+                                                            alt="">
 
                                                     </a>
                                                 </li>
@@ -138,43 +138,70 @@
 
             <div class="breadcome-area">
                 <div class="container-fluid">
-
-
-
-
                     <div class="analytics-sparkle-area">
                         <div class="container-fluid">
                             <div class="row">
-
                                 {{-- Chart --}}
                                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                                     <div class="analytics-sparkle-line reso-mg-b-30">
                                         <div class="analytics-content">
                                             <h5>Number of Contrbutions within
-                                                {{-- <span>({{ $faculty->name }})</span>  --}}
+                                                {{-- <span>({{ $faculty->name }})</span> --}}
                                                 for
                                                 each academic
                                                 year
                                             </h5>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
 
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <br>
-
-                                            <div id="line2-chart">
+                                            <!-- <div id="line2-chart">
                                                 <canvas id="barchart1"></canvas>
+                                            </div> -->
+
+                                            <div id="bar-chart">
+                                                <small></small>
+                                                <canvas id="barchart"></canvas>
                                             </div>
 
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <br>
+                                            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                                            <script>
+                                                document.addEventListener("DOMContentLoaded", function() {
+                                                    var ctx = document.getElementById("barchart").getContext('2d');
+                                                    var customBarChart = new Chart(ctx, {
+                                                        type: 'bar',
+                                                        data: {
+                                                            labels: ["2020", "2021", "2022", "2023", "2024"],
+                                                            datasets: [{
+                                                                label: "Each Academic Year",
+                                                                data: [23, 30, 25, 27, 24],
+                                                                backgroundColor: [
+                                                                    'rgba(255, 99, 132, 0.2)',
+                                                                    'rgba(54, 162, 235, 0.2)',
+                                                                    'rgba(255, 206, 86, 0.2)',
+                                                                    'rgba(75, 192, 192, 0.2)',
+                                                                    'rgba(153, 102, 255, 0.2)',
+                                                                ],
+                                                                borderColor: [
+                                                                    'rgba(255, 99, 132, 1)',
+                                                                    'rgba(54, 162, 235, 1)',
+                                                                    'rgba(255, 206, 86, 1)',
+                                                                    'rgba(75, 192, 192, 1)',
+                                                                    'rgba(153, 102, 255, 1)',
+                                                                ],
+                                                                borderWidth: 1
+                                                            }]
+                                                        }
+                                                    });
+                                                });
+                                            </script>
 
-
-
-
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
                                         </div>
                                     </div>
                                 </div>
@@ -190,28 +217,99 @@
                                                 academic
                                                 year
                                             </h5>
-                                            {{-- <div id="pie-chart">
-                                                <small></small> <canvas id="piechart"></canvas>
-                                            </div> --}}
 
 
                                             <div id="pie-chart">
                                                 <small></small>
                                                 <canvas id="piechart"></canvas>
                                             </div>
-
-
-
                                             <script>
                                                 document.addEventListener("DOMContentLoaded", function() {
                                                     var ctx = document.getElementById("piechart").getContext('2d');
                                                     var customPieChart = new Chart(ctx, {
                                                         type: 'pie', // Change this to 'doughnut' if you prefer a doughnut chart.
                                                         data: {
-                                                            labels: ["lee lee", "lar lar", "Grapes", "Bananas", "Peaches"],
+                                                            labels: ["Engineering", "Arts and Sciences", "Information Technology", "Education",
+                                                                "Social Sciences", "Business Administration"
+                                                            ],
                                                             datasets: [{
-                                                                label: "Fruits",
-                                                                data: [12, 19, 3, 5, 2, 3],
+                                                                data: [10, 21, 7, 9, 11, 13], // Add new data points here
+                                                                backgroundColor: [
+                                                                    'rgba(255, 99, 132, 0.2)',
+                                                                    'rgba(54, 162, 235, 0.2)',
+                                                                    'rgba(255, 206, 86, 0.2)',
+                                                                    'rgba(75, 192, 192, 0.2)',
+                                                                    'rgba(153, 102, 255, 0.2)',
+                                                                    'rgba(255, 159, 64, 0.2)',
+                                                                    'rgba(75, 192, 192, 0.2)',
+                                                                    'rgba(255, 99, 132, 0.2)',
+                                                                    'rgba(54, 162, 235, 0.2)',
+                                                                    'rgba(255, 206, 86, 0.2)',
+                                                                ],
+                                                                borderColor: [
+                                                                    'rgba(255,99,132,1)',
+                                                                    'rgba(54, 162, 235, 1)',
+                                                                    'rgba(255, 206, 86, 1)',
+                                                                    'rgba(75, 192, 192, 1)',
+                                                                    'rgba(153, 102, 255, 1)',
+                                                                    'rgba(255, 159, 64, 1)',
+                                                                    'rgba(75, 192, 192, 1)',
+                                                                    'rgba(255,99,132,1)',
+                                                                    'rgba(54, 162, 235, 1)',
+                                                                    'rgba(255, 206, 86, 1)',
+                                                                ],
+                                                                borderWidth: 1
+                                                            }]
+                                                        },
+                                                        options: {
+                                                            responsive: true,
+                                                            legend: {
+                                                                position: 'top',
+                                                            },
+                                                            animation: {
+                                                                animateScale: true,
+                                                                animateRotate: true
+                                                            }
+                                                        }
+                                                    });
+                                                });
+                                            </script>
+                                            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="analytics-sparkle-line reso-mg-b-30">
+                                        <div class="analytics-content">
+                                            <h5>
+                                                <br>
+                                                Number of contributors within
+                                                {{-- <span>({{ $faculty->name }})</span> --}}
+                                                for
+                                                each academic
+                                                year
+                                            </h5>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <div id="bar-chart">
+                                                <small></small>
+                                                <canvas id="barchart2"></canvas>
+                                            </div>
+
+                                            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                                            <script>
+                                                document.addEventListener("DOMContentLoaded", function() {
+                                                    var ctx = document.getElementById("barchart2").getContext('2d');
+                                                    var customBarChart = new Chart(ctx, {
+                                                        type: 'bar',
+                                                        data: {
+                                                            labels: ["2020", "2021", "2022", "2023", "2024"],
+                                                            datasets: [{
+                                                                label: "Each Academic Year",
+                                                                data: [10, 17, 10, 9, 12],
                                                                 backgroundColor: [
                                                                     'rgba(255, 99, 132, 0.2)',
                                                                     'rgba(54, 162, 235, 0.2)',
@@ -220,7 +318,7 @@
                                                                     'rgba(153, 102, 255, 0.2)',
                                                                 ],
                                                                 borderColor: [
-                                                                    'rgba(255,99,132,1)',
+                                                                    'rgba(255, 99, 132, 1)',
                                                                     'rgba(54, 162, 235, 1)',
                                                                     'rgba(255, 206, 86, 1)',
                                                                     'rgba(75, 192, 192, 1)',
@@ -234,10 +332,6 @@
                                                             legend: {
                                                                 position: 'top',
                                                             },
-                                                            title: {
-                                                                display: true,
-                                                                text: 'Fruit Consumption'
-                                                            },
                                                             animation: {
                                                                 animateScale: true,
                                                                 animateRotate: true
@@ -246,33 +340,6 @@
                                                     });
                                                 });
                                             </script>
-
-
-                                            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                                    <div class="analytics-sparkle-line reso-mg-b-30">
-                                        <div class="analytics-content">
-                                            <h5>Number of contributors within
-                                                {{-- <span>({{ $faculty->name }})</span> --}}
-                                                for
-                                                each academic
-                                                year
-                                            </h5>
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <div id="line2-chart">
-                                                <canvas id="barchart2"></canvas>
-                                            </div>
                                             <br>
                                             <br>
                                             <br>
@@ -310,15 +377,13 @@
                                         class="btn btn-custon-four btn-primary btn-lg">Download</button>
                                 </div>
                             </form>
-
                             <script>
                                 document.addEventListener("DOMContentLoaded", function() {
                                     var selectElement = document.getElementById("magazineSelect");
                                     var downloadButton = document.getElementById("downloadButton");
 
                                     // Add change event listener to the select element
-                                    selectElement.addEventListener("change", function() {
-                                        var selectedIndex = selectElement.selectedIndex;
+                                    selectElement.addEventListener("change", function() var selectedIndex = selectElement.selectedIndex;
                                         var closureDate = @json($magazines->pluck('finalclosure_date'));
 
                                         // Check if closure date is beyond today's date for the selected magazine
@@ -330,29 +395,6 @@
                                     });
                                 });
                             </script>
-
-                            {{--
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <select name="" id="" class="form-control"
-                                    placeholder="University Magazines - Academic year">
-                                    @foreach ($magazines as $magazine)
-                                        @php
-                                            $closureDate = App\Models\Magazine::latest()->first()->closure_date;
-                                            // @dd($closureDate)
-                                        @endphp
-
-                                        @if ($closureDate && now()->gt($closureDate))
-                                        @endif
-
-
-                                        <option>{{ $magazine->title }}</option>
-                                        <button type="button"
-                                            class="btn btn-custon-four btn-primary btn-lg">Download</button>
-                                    @endforeach
-
-                                </select>
-                                <!-- <input type="text" class="form-control" placeholder="University Magazines - Academic year"> -->
-                            </div> --}}
                             <div class="col-lg-12 col-md-6 col-sm-6 col-xs-12">
                                 <br>
                                 <br>
@@ -362,9 +404,6 @@
                     </div>
                 </div>
             </div>
-
-
-
             <div class="breadcome-area">
                 <div class="container-fluid">
                     <div class="row">
@@ -382,20 +421,15 @@
                     </div>
                 </div>
             </div>
-
             <div class="breadcome-area">
                 <div class="container-fluid">
                     <div class="row">
-
-
-
                         @foreach ($faculties as $faculty)
                             <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                                 <div
                                     class="breadcome-list single-page-breadcome col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <img src="../img/profile/1.jpg" alt="" class="col-lg-5" />
+                                    <!-- <img src="../img/profile/1.jpg" alt="" class="col-lg-5" /> -->
                                     <h2><small><b>{{ $faculty->name }}</b> </small></h2>
-
                                     @php
                                         $users = App\Models\User::whereHas('assignedRoles', function ($query) use (
                                             $faculty,
@@ -420,14 +454,10 @@
                                 </div>
                             </div>
                         @endforeach
-
-
                     </div>
                 </div>
             </div>
-
-
-
+            @include('frontend.footer')
         </div>
 
         <!-- jquery

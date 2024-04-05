@@ -79,11 +79,17 @@
 
 <body>
 
+    @hasRole(['Marketing Coordinator'])
+    
     @include('frontend/Marketing Coordinator/coordinator-slidebar')
+    @endhasRole
+    @hasRole(['Marketing Manager'])
+    @include('frontend/Marketing Manager/manager-slidebar')
+    @endhasRole
 
     @php
-        use App\Models\Magazine;
-        $cd = Magazine::latest()->get()->first()->closure_date;
+    use App\Models\Magazine;
+    $cd = Magazine::latest()->get()->first()->closure_date;
 
     @endphp
 
@@ -116,8 +122,7 @@
                                                     <a href="#" role="button" class="nav-link dropdown-toggle">
                                                         <span class="admin-name">Welcome
                                                             {{ auth()->user()->name }}</span>
-                                                        <img src="{{ asset('storage/' . auth()->user()->profile) }}"
-                                                            alt="">
+                                                        <img src="{{ asset('storage/' . auth()->user()->profile) }}" alt="">
                                                     </a>
                                                 </li>
                                             </ul>
@@ -144,8 +149,7 @@
                                                 {{ $article->user->assignedRoles->first()->faculty->name }}
 
                                             </b></small> </h1>
-                                    <b
-                                        class="col-lg-5 col-md-8 col-sm-8 col-xs-12">{{ $article->created_at->diffForHumans() }}</b>
+                                    <b class="col-lg-5 col-md-8 col-sm-8 col-xs-12">{{ $article->created_at->diffForHumans() }}</b>
                                 </div>
                             </div>
                             <div class="review-content-section col-sm-12">
@@ -172,24 +176,23 @@
                             {{-- Start --}}
 
                             @foreach ($article->files as $file)
-                                @php
-                                    // Replace 'public/' with 'storage/' in the file path
-                                    $filePath = str_replace('public/', 'storage/', $file->file_path);
-                                @endphp
+                            @php
+                            // Replace 'public/' with 'storage/' in the file path
+                            $filePath = str_replace('public/', 'storage/', $file->file_path);
+                            @endphp
 
-                                @if (Str::endsWith($file->file_path, ['.doc', '.docx']))
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="review-content-section col-sm-12">
-                                            <a href="{{ asset($filePath) }}"
-                                                class="col-lg-4 col-md-12 col-sm-12 col-xs-12 btn btn-custon-four btn-primary btn-lg">
-                                                <i class="fa fa-file-word-o" style="font-size:18px">
-                                                    <span>Contribution file as a Word Document</span></i></a>
-                                        </div>
-                                    </div>
-                                @endif
+                            @if (Str::endsWith($file->file_path, ['.doc', '.docx']))
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="review-content-section col-sm-12">
+                                    <a href="{{ asset($filePath) }}" class="col-lg-4 col-md-12 col-sm-12 col-xs-12 btn btn-custon-four btn-primary btn-lg">
+                                        <i class="fa fa-file-word-o" style="font-size:18px">
+                                            <span>Contribution file as a Word Document</span></i></a>
+                                </div>
+                            </div>
+                            @endif
 
-                                {{-- Check if the file is a .doc or .docx and skip it --}}
-                                {{-- @if (Str::endsWith($file->file_path, ['.doc', '.docx']))
+                            {{-- Check if the file is a .doc or .docx and skip it --}}
+                            {{-- @if (Str::endsWith($file->file_path, ['.doc', '.docx']))
                                 @continue
                             @endif --}}
                             @endforeach
@@ -215,24 +218,23 @@
                                         <div class="col-lg-12 custom-pro-edt-ds">
                                             <div class="review-content-section">
                                                 @foreach ($article->files as $file)
-                                                    @php
-                                                        // Replace 'public/' with 'storage/' in the file path
-                                                        $filePath = str_replace(
-                                                            'public/',
-                                                            'storage/',
-                                                            $file->file_path,
-                                                        );
-                                                    @endphp
+                                                @php
+                                                // Replace 'public/' with 'storage/' in the file path
+                                                $filePath = str_replace(
+                                                'public/',
+                                                'storage/',
+                                                $file->file_path,
+                                                );
+                                                @endphp
 
-                                                    {{-- Check if the file is a .doc or .docx and skip it --}}
-                                                    @if (Str::endsWith($file->file_path, ['.doc', '.docx']))
-                                                        @continue
-                                                    @endif
+                                                {{-- Check if the file is a .doc or .docx and skip it --}}
+                                                @if (Str::endsWith($file->file_path, ['.doc', '.docx']))
+                                                @continue
+                                                @endif
 
-                                                    {{-- Display image --}}
+                                                {{-- Display image --}}
 
-                                                    <img class="main-logo btn-spacing" src="{{ asset($filePath) }}"
-                                                        width="250px" />
+                                                <img class="main-logo btn-spacing" src="{{ asset($filePath) }}" width="250px" />
                                                 @endforeach
                                             </div>
                                         </div>
@@ -244,12 +246,12 @@
                                             <div class="login-horizental cancel-wp pull-left form-bc-ele col-lg-12">
                                                 <div class="button-ap-list responsive-btn">
                                                     <div class="button-style-four btn-mg-b-10">
-                                                        <a href="/mc/article/{{ $article->id }}/edit"><button
-                                                                type="button"
-                                                                class="col-lg-2 btn btn-custon-rounded-four btn-primary btn-spacing">Edit</button></a>
-                                                        <a href="/download-articles?article={{ $article->id }}"><button
-                                                                type="button"
-                                                                class="col-lg-2 btn btn-custon-rounded-four btn-primary btn-spacing">Download</button></a>
+
+                                                    @hasRole(['Marketing Coordinator'])
+                                                    
+                                                    <a href="/mc/article/{{ $article->id }}/edit"><button type="button" class="col-lg-2 btn btn-custon-rounded-four btn-primary btn-spacing">Edit</button></a>
+                                                    @endhasRole
+                                                        <a href="/download-articles?article={{ $article->id }}"><button type="button" class="col-lg-2 btn btn-custon-rounded-four btn-primary btn-spacing">Download</button></a>
                                                         {{--
                                                         <button type="button"
                                                             class="col-sm-2 btn btn-custon-rounded-four btn-primary">Download</button> --}}
@@ -271,10 +273,10 @@
         <div class="col-lg-12 col-md-8 col-sm-8 col-xs-12">
 
             @php
-                $canComment =
-                    auth()
-                        ->user()
-                        ->hasRole(['Student', 'Marketing Coordinator']) || auth()->user()->id == $article->user_id;
+            $canComment =
+            auth()
+            ->user()
+            ->hasRole(['Student', 'Marketing Coordinator']) || auth()->user()->id == $article->user_id;
             @endphp
 
 
@@ -289,31 +291,31 @@
             <div class="product-payment-inner-st res-mg-t-30 analysis-progrebar-ctn ">
 
                 @if ($canComment)
-                    <ul class="main-sparkline12-hd">
-                        <bold>
-                            <h1>------------------------------------------------------------------ Leave a comment
-                                -------------------------------------------------------------------</h1>
-                        </bold>
-                    </ul>
+                <ul class="main-sparkline12-hd">
+                    <bold>
+                        <h1>------------------------------------------------------------------ Leave a comment
+                            -------------------------------------------------------------------</h1>
+                    </bold>
+                </ul>
 
-                    <div class="p-xs">
-                        <form action="/article/{{ $article->id }}/comments" method="post">
-                            @csrf
+                <div class="p-xs">
+                    <form action="/article/{{ $article->id }}/comments" method="post">
+                        @csrf
 
-                            <!-- <form method="get" class="form-horizontal"> -->
-                            <div>
-                                <textarea name="comment" type="text" class="form-control input-sm" placeholder="Comment"></textarea>
+                        <!-- <form method="get" class="form-horizontal"> -->
+                        <div>
+                            <textarea name="comment" type="text" class="form-control input-sm" placeholder="Comment"></textarea>
 
-                                @error('comment')
-                                    <p class="text-danger">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="login-horizental cancel-wp pull-left form-bc-ele">
-                                <button type="submit" class="btn btn-custon-rounded-four btn-primary">Submit</button>
-                                <button type="reset" class="btn btn-custon-rounded-four btn-danger">Cancel</button>
-                            </div>
-                        </form>
-                    </div>
+                            @error('comment')
+                            <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="login-horizental cancel-wp pull-left form-bc-ele">
+                            <button type="submit" class="btn btn-custon-rounded-four btn-primary">Submit</button>
+                            <button type="reset" class="btn btn-custon-rounded-four btn-danger">Cancel</button>
+                        </div>
+                    </form>
+                </div>
                 @endif
 
 
@@ -327,13 +329,13 @@
                                 <ul class="main-sparkline12-hd">
                                     <bold>
                                         @if ($article->comments->count() == 0)
-                                            <h1>----------------------------------------------------------------
-                                                No Comments
-                                                ----------------------------------------------------------------</h1>
+                                        <h1>----------------------------------------------------------------
+                                            No Comments
+                                            ----------------------------------------------------------------</h1>
                                         @else
-                                            <h1>----------------------------------------------------------------
-                                                Comments {{ $article->comments->count() }}
-                                                ----------------------------------------------------------------</h1>
+                                        <h1>----------------------------------------------------------------
+                                            Comments {{ $article->comments->count() }}
+                                            ----------------------------------------------------------------</h1>
                                         @endif
 
                                     </bold>
@@ -344,81 +346,76 @@
 
 
                                 @foreach ($article->comments()->latest()->get() as $comment)
-                                    @php
-                                        $canDelete =
-                                            auth()
-                                                ->user()
-                                                ->hasRole(['Student', 'Marketing Coordinator']) &&
-                                            auth()->user()->id == $comment->user_id;
-                                    @endphp
+                                @php
+                                $canDelete =
+                                auth()
+                                ->user()
+                                ->hasRole(['Student', 'Marketing Coordinator']) &&
+                                auth()->user()->id == $comment->user_id;
+                                @endphp
 
-                                    @php
-                                        $canView = auth()
-                                            ->user()
-                                            ->hasRole(['Student', 'Marketing Coordinator', 'Marketing Manager']);
-                                    @endphp
+                                @php
+                                $canView = auth()
+                                ->user()
+                                ->hasRole(['Student', 'Marketing Coordinator', 'Marketing Manager']);
+                                @endphp
 
-                                    @php
-                                        $roleName =
-                                            $comment->user->assignedRoles->first()->role->name ==
-                                            'Marketing Coordinator';
-                                    @endphp
+                                @php
+                                $roleName =
+                                $comment->user->assignedRoles->first()->role->name ==
+                                'Marketing Coordinator';
+                                @endphp
 
-                                    {{-- @dd($roleName); --}}
-                                    {{-- @if ($article->comments()->latest()->first()->user->assignedRoles->first()->role->name == 'Marketing Coordinator') --}}
-                                    <div
-                                        class="alert {{ $roleName ? 'alert-warning' : 'alert-info' }} col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                                            <div>
-                                                <img src="{{ asset('storage/' . $comment->user->profile) }}"
-                                                    width="40px" alt="">
-                                                {{ $article->comments()->latest()->first()->user->role }}
-                                                <strong>{{ $comment->user->name }}</strong><br><br>
-                                                <p><b>{{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}</b>
-                                                </p>
+                                {{-- @dd($roleName); --}}
+                                {{-- @if ($article->comments()->latest()->first()->user->assignedRoles->first()->role->name == 'Marketing Coordinator') --}}
+                                <div class="alert {{ $roleName ? 'alert-warning' : 'alert-info' }} col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                                        <div>
+                                            <img src="{{ asset('storage/' . $comment->user->profile) }}" width="40px" alt="">
+                                            {{ $article->comments()->latest()->first()->user->role }}
+                                            <strong>{{ $comment->user->name }}</strong><br><br>
+                                            <p><b>{{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}</b>
+                                            </p>
 
-                                                {{ $comment->comment }}
+                                            {{ $comment->comment }}
 
-                                            </div>
                                         </div>
-
-
-                                        @php
-                                            $canDelete =
-                                                auth()
-                                                    ->user()
-                                                    ->hasRole(['Student', 'Marketing Coordinator']) &&
-                                                auth()->user()->id == $comment->user_id;
-                                        @endphp
-
-                                        @php
-                                            $canView = auth()
-                                                ->user()
-                                                ->hasRole(['Student', 'Marketing Coordinator', 'Marketing Manager']);
-                                        @endphp
-
-
-                                        @if ($canDelete)
-                                            <form action="/article/comment/delete/{{ $comment->id }}"
-                                                method="post">
-                                                @csrf
-                                                @method('delete')
-
-                                                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 text-right">
-                                                    <button type="submit" class="btn btn-danger"><i
-                                                            class="fa fa-trash-o"
-                                                            style="font-size:15px"></i>Delete</button>
-                                                </div>
-                                            </form>
-                                        @endif
-
-
                                     </div>
-                                    {{-- @endif --}}
 
 
-                                    {{-- @if ($article->comments()->latest()->first()->user->assignedRoles->first()->role->name == 'Student') --}}
-                                    {{-- <div class="alert alert-info col-lg-12 col-md-12 col-sm-12 col-xs-12"
+                                    @php
+                                    $canDelete =
+                                    auth()
+                                    ->user()
+                                    ->hasRole(['Student', 'Marketing Coordinator']) &&
+                                    auth()->user()->id == $comment->user_id;
+                                    @endphp
+
+                                    @php
+                                    $canView = auth()
+                                    ->user()
+                                    ->hasRole(['Student', 'Marketing Coordinator', 'Marketing Manager']);
+                                    @endphp
+
+
+                                    @if ($canDelete)
+                                    <form action="/article/comment/delete/{{ $comment->id }}" method="post">
+                                        @csrf
+                                        @method('delete')
+
+                                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 text-right">
+                                            <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o" style="font-size:15px"></i>Delete</button>
+                                        </div>
+                                    </form>
+                                    @endif
+
+
+                                </div>
+                                {{-- @endif --}}
+
+
+                                {{-- @if ($article->comments()->latest()->first()->user->assignedRoles->first()->role->name == 'Student') --}}
+                                {{-- <div class="alert alert-info col-lg-12 col-md-12 col-sm-12 col-xs-12"
                                                 role="alert">
 
                                                 @php
@@ -441,38 +438,35 @@
                                                     <div>
                                                         <img src="../img/notification/2.jpg" width="40px" alt="">
                                                         <strong>{{ $comment->user->name }}</strong><br><br>
-                                                        <p><b>{{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}</b>
-                                                        </p>
-                                                        {{ $comment->comment }}
-                                                    </div>
-                                                </div>
-
-                                                @if ($canDelete)
-                                                    <form action="/article/comment/delete/{{ $comment->id }}"
-                                                        method="post">
-                                                        @csrf
-                                                        @method('delete')
-
-                                                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 text-right">
-                                                            <button type="submit" class="btn btn-danger"><i
-                                                                    class="fa fa-trash-o"
-                                                                    style="font-size:15px"></i>Delete</button>
-                                                        </div>
-                                                    </form>
-                                                @endif
-                                            </div> --}}
-                                    {{-- @endif --}}
-                                @endforeach
-
-
+                                <p><b>{{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}</b>
+                                </p>
+                                {{ $comment->comment }}
                             </div>
                         </div>
-                    </div>
+
+                        @if ($canDelete)
+                        <form action="/article/comment/delete/{{ $comment->id }}" method="post">
+                            @csrf
+                            @method('delete')
+
+                            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 text-right">
+                                <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o" style="font-size:15px"></i>Delete</button>
+                            </div>
+                        </form>
+                        @endif
+                    </div> --}}
+                    {{-- @endif --}}
+                    @endforeach
+
+
                 </div>
             </div>
-
         </div>
-        </form>
+    </div>
+    </div>
+
+    </div>
+    </form>
     </div>
     </div>
     </div>

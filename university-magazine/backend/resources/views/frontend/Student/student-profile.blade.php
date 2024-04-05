@@ -244,10 +244,14 @@
                                                             @enderror
                                                         </div>
                                                     </div>
-                                                    {{-- <div class="form-group col-lg-12 ">
-                                                    <input type="number" class="form-control"
-                                                        placeholder="Phone no.">
-                                                </div> --}}
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group">
+                                                        <label class="">
+                                                                Upload your profile
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                
                                                     <div class="form-group col-lg-12 ">
                                                         <div class="file-upload-inner ts-forms">
                                                             <div class="input prepend-big-btn">

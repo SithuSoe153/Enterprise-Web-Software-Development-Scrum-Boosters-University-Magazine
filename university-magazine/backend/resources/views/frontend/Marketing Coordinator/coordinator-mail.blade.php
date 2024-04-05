@@ -138,7 +138,6 @@
                             <div class="panel-body">
                                 <div class="table-responsive ib-tb">
                                     <table class="table table-hover table-mailbox">
-                                        {{-- @dd($allComments) --}}
                                         @foreach ($allComments as $comment)
                                             @if ($comment['comment']->user_id !== auth()->user()->id)
                                                 <tbody>

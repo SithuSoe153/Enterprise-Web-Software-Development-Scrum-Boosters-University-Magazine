@@ -211,18 +211,15 @@
                                                                             style="color: white; font-size: 16px;"><i
                                                                                 class="fa fa-info-circle edu-informatio"></i>See
                                                                             more</button></a> |
-                                                                    <a href="#">
-                                                                        <form
-                                                                            action="/user/{{ $manager->id }}/destroy"
-                                                                            method="POST">
-                                                                            @csrf
-                                                                            @method('DELETE')
-                                                                            <button
-                                                                                class="btn-custon-rounded btn-danger btn-xs"
-                                                                                style="color: white; font-size: 16px;"><i
-                                                                                    class="fa fa-trash-o"
-                                                                                    style="font-size:16px"></i>Delete</button>
-                                                                        </form>
+                                                                    <a href="/user/{{ $manager->id }}/destroy">
+                                                                        <method="POST">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <button
+                                                                            class="btn-custon-rounded btn-danger btn-xs"
+                                                                            style="color: white; font-size: 16px;"><i
+                                                                                class="fa fa-trash-o"
+                                                                                style="font-size:16px"></i>Delete</button>
 
                                                                     </a>
                                                                 </td>
@@ -274,22 +271,19 @@
                                                                 <td>{{ $coordinator->email }}</td>
                                                                 <td><button
                                                                         class="btn-custon-rounded btn-primary btn-xs"><a
-                                                                            href="user-profile.php"
+                                                                            href="/user-profile/{{ $coordinator->id }}"
                                                                             style="color: white; font-size: 16px;"><i
                                                                                 class="fa fa-info-circle edu-informatio"></i>See
                                                                             more</button></a> |
-                                                                    <a href="#">
-                                                                        <form
-                                                                            action="/user/{{ $coordinator->id }}/destroy"
-                                                                            method="POST">
-                                                                            @csrf
-                                                                            @method('DELETE')
-                                                                            <button
-                                                                                class="btn-custon-rounded btn-danger btn-xs"
-                                                                                style="color: white; font-size: 16px;"><i
-                                                                                    class="fa fa-trash-o"
-                                                                                    style="font-size:16px"></i>Delete</button>
-                                                                        </form>
+                                                                    <a href="/user/{{ $coordinator->id }}/destroy">
+                                                                        <method="POST">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <button
+                                                                            class="btn-custon-rounded btn-danger btn-xs"
+                                                                            style="color: white; font-size: 16px;"><i
+                                                                                class="fa fa-trash-o"
+                                                                                style="font-size:16px"></i>Delete</button>
                                                                     </a>
                                                                 </td>
                                                             </tr>
@@ -338,23 +332,20 @@
                                                                 <td>{{ $student->email }}</td>
                                                                 <td><button
                                                                         class="btn-custon-rounded btn-primary btn-xs"><a
-                                                                            href="user-profile.php"
+                                                                            href="/user-profile/{{ $student->id }}"
                                                                             style="color: white; font-size: 16px;"><i
                                                                                 class="fa fa-info-circle edu-informatio"></i>See
                                                                             more</button></a> |
-                                                                    <a href="#">
+                                                                    <a href="/user/{{ $student->id }}/destroy">
 
-                                                                        <form
-                                                                            action="/user/{{ $student->id }}/destroy"
-                                                                            method="POST">
-                                                                            @csrf
-                                                                            @method('DELETE')
-                                                                            <button
-                                                                                class="btn-custon-rounded btn-danger btn-xs"
-                                                                                style="color: white; font-size: 16px;"><i
-                                                                                    class="fa fa-trash-o"
-                                                                                    style="font-size:16px"></i>Delete</button>
-                                                                        </form>
+                                                                        <method="POST">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <button
+                                                                            class="btn-custon-rounded btn-danger btn-xs"
+                                                                            style="color: white; font-size: 16px;"><i
+                                                                                class="fa fa-trash-o"
+                                                                                style="font-size:16px"></i>Delete</button>
                                                                     </a>
                                                                 </td>
                                                             </tr>

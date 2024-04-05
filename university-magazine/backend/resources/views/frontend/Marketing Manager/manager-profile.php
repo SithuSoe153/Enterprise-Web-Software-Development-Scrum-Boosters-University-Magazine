@@ -226,6 +226,7 @@
                     </div>
                 </div>
             </div>
+            @include('frontend.footer')
         </div>
 
         <!-- jquery

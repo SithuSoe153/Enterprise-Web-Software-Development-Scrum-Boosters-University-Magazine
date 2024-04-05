@@ -320,6 +320,7 @@
 
 
                                             <tbody>
+
                                                 @foreach ($articles as $article)
                                                     @php
                                                         $canCheck = $article->comments->count() != 0;
@@ -342,8 +343,6 @@
                                                         </td>
                                                     </tr>
                                                 @endforeach
-
-
                                             </tbody>
                                         </table>
                                     </div>
@@ -353,6 +352,7 @@
                     </div>
                 </div>
             </div>
+            @include('frontend.footer')
         </div>
 
         <!-- jquery
