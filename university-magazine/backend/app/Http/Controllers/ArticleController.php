@@ -320,10 +320,19 @@ class ArticleController extends Controller
     protected $fillable = ['title', 'user_id', 'file_path'];
     public function downloadArticlesZip()
     {
+
+
         $zip = new ZipArchive;
         $zipFileName = 'articles_' . now()->format('YmdHis') . '.zip';
-        $zipPath = storage_path('app/public/' . $zipFileName);
 
+        if (is_null($zipFileName)) {
+            // Handle the error (e.g., log, throw an exception, return an error response)
+
+            return response()->json(['error' => 'Filename is null'], 500);
+        }
+
+
+        $zipPath = storage_path('app/public/' . $zipFileName);
 
 
         if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
@@ -366,6 +375,14 @@ class ArticleController extends Controller
 
 
             $zip->close();
+
+
+
+            // Check if the file exists
+            if (!Storage::exists($zipPath)) {
+                return redirect()->back()->with('success', 'Sorry! There are no published articles for this year available for download yet.');
+            }
+
 
             // Download ZIP
             return response()->download($zipPath)->deleteFileAfterSend(true);

@@ -135,6 +135,13 @@
                     </div>
                 </div>
             </div>
+            @if (session()->has('success'))
+                <div class="alert alert-danger text-center" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+
         </div>
         <!-- Single pro tab review Start-->
         <div class="single-pro-review-area mt-t-30 mg-b-15">
