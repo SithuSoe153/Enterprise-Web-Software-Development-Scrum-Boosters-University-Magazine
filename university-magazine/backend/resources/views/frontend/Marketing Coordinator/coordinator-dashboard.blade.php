@@ -218,8 +218,16 @@
 
                     // echo $totalArticlesInFaculty;
 
+                    // $students = User::whereHas('assignedRoles', function ($query) use ($facultyId) {
+                    //     $query->where('faculty_id', $facultyId)->whereHas('role', function ($subQuery) {
+                    //         $subQuery->where('id', 4); // Assuming you want to match by role ID directly
+                    //         // Or if you want to match by role name
+                    //         // $subQuery->where('name', 'Student');
+                    //     });
+                    // })->get();
+
                     $students = User::whereHas('assignedRoles', function ($query) use ($facultyId) {
-                        $query->where('faculty_id', $facultyId)->whereHas('role', function ($subQuery) {
+                        $query->whereHas('role', function ($subQuery) {
                             $subQuery->where('id', 4); // Assuming you want to match by role ID directly
                             // Or if you want to match by role name
                             // $subQuery->where('name', 'Student');

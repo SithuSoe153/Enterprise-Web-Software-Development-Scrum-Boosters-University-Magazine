@@ -253,7 +253,10 @@ class UserController extends Controller
         $user = auth()->user();
 
         // Retrieve all comments made by the current user
-        $comments = $user->comments;
+        // $comments = $user->comments;
+        $comments = Comment::whereHas('user.assignedRoles', function ($query) {
+            $query->where('role_id', 4); // Filter by the role ID
+        })->get();
 
         // Extract the unique articles associated with these comments
         $articles = $comments->map(function ($comment) {

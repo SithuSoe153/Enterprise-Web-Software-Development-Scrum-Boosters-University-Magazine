@@ -124,7 +124,7 @@ class AuthController extends Controller
 
                 // Retrieve articles submitted by students of the Marketing Coordinator's faculty
                 $articles = Article::whereHas('user.assignedRoles', function ($query) use ($facultyId) {
-                    $query->where('faculty_id', $facultyId);
+                    $query->where('faculty_id', $facultyId)->where('is_selected', 1);
                 })->get();
 
                 // see guest

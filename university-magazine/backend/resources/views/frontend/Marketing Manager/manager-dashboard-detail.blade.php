@@ -172,17 +172,15 @@
         @php
             use App\Models\Article;
             use App\Models\User;
+            use App\Models\Faculty;
 
             $allcontributions = Article::all()->count();
 
-            $facultyId = auth()
-                ->user()
-                ->assignedRoles->where('user_id', auth()->user()->id)
-                ->first()->faculty_id;
+            $facultyId = $faculty->id;
 
             $totalArticlesInFaculty = Article::whereHas('user', function ($query) use ($facultyId) {
                 $query->whereHas('assignedRoles', function ($innerQuery) use ($facultyId) {
-                    $innerQuery->where('faculty_id', $facultyId);
+                    $innerQuery->where('faculty_id', $facultyId)->where('is_selected', 1);
                 });
             })->count();
 
@@ -322,7 +320,6 @@
 
 
                                             <tbody>
-
                                                 @foreach ($articles as $article)
                                                     @php
                                                         $canCheck = $article->comments->count() != 0;
