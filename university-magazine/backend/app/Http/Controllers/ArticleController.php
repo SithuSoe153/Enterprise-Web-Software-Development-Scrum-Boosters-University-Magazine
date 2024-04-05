@@ -332,9 +332,11 @@ class ArticleController extends Controller
 
                 $articleId = request()->query('article');
                 $article = Article::find($articleId);
+
                 // dd($articles);
 
                 // dd($articleId);
+
                 $articleFolderPath = storage_path('app/public/articles/user' . $article->user_id . '_' . $article->created_at->format('YmdHis'));
 
 

@@ -383,8 +383,11 @@
                                     var downloadButton = document.getElementById("downloadButton");
 
                                     // Add change event listener to the select element
-                                    selectElement.addEventListener("change", function() var selectedIndex = selectElement.selectedIndex;
-                                        var closureDate = @json($magazines->pluck('finalclosure_date'));
+                                    selectElement.addEventListener("change", function() {
+
+                                        var selectedIndex = selectElement.selectedIndex
+                                        // Adjust for zero-based index if there's no placeholder
+                                        var closureDate = @json($magazines->pluck('finalclosure_date')->values());
 
                                         // Check if closure date is beyond today's date for the selected magazine
                                         if (closureDate[selectedIndex] && new Date(closureDate[selectedIndex]) < new Date()) {
