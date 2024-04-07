@@ -82,39 +82,59 @@
             <div class="content-error">
                 <div class="hpanel">
                     <div class="panel-body">
-                        <form action="#" id="loginForm">
+                        <form action="/submit-form/guest" method="POST">
+                            @csrf
+                            @method('POST')
+
+                            <input type="hidden" name="role" value="5">
+
+
                             <div class="row">
                                 <div class="form-group col-lg-12">
                                     <label>Username</label>
-                                    <input class="form-control">
+                                    <input name="name" type="text" class="form-control" placeholder="User Name"
+                                        value="{{ old('name') }}">
+                                    @error('name')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+
+
                                 </div>
                                 <div class="form-group col-lg-12">
                                     <label>Email Address</label>
-                                    <input class="form-control">
+                                    <input name="email" type="email" class="form-control"
+                                        placeholder="Email Address" value="{{ old('email') }}">
+
+                                    @error('email')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+
+
                                 </div>
+
+
                                 <div class="form-group col-lg-12">
                                     <label>Password</label>
-                                    <input type="password" class="form-control">
+                                    <input name="password" type="password" class="form-control" placeholder="Password">
                                 </div>
-                                <div class="form-group col-lg-12">
+                                {{-- <div class="form-group col-lg-12">
                                     <label>Confirm password</label>
                                     <input type="password" class="form-control">
-                                </div>
+                                </div> --}}
                                 <div class="form-group col-lg-12">
                                     <label>Faculty</label>
-                                    <select class="form-control custom-select-value" name="account">
-                                        <option>Faculty</option>
-                                        <option>Physics</option>
-                                        <option>Biology</option>
-                                        <option>Health</option>
-                                        <option>IT</option>
-                                        <option>Law</option>
-                                        <option>Geography</option>
+                                    <select required class="form-control custom-select-value" name="faculty_id">
+                                        <option value="">Select Faculty
+                                        </option>
+                                        @foreach ($faculties as $faculty)
+                                            <option value="{{ $faculty->id }}">
+                                                {{ $faculty->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
                             <div class="text-center">
-                                <button class="btn btn-success loginbtn">Sign Up</button>
+                                <button type="submit" class="btn btn-success loginbtn">Sign Up</button>
                                 <!-- <button class="btn btn-default">Cancel</button> -->
                             </div>
                         </form>
@@ -134,7 +154,7 @@
                                 <div class="row">
                                     <div class="col-lg-12 text-center">
                                         <div class="text-center modal-bootstrap modal-login-form">
-                                            <a class="zoomInDown mg-t text-center" href="#" data-toggle="modal"
+                                            <a class="zoomInDown mg-t text-center" href="/login" data-toggle="modal"
                                                 data-target="#zoomInDown1">Please Sign In</a>
                                         </div>
                                         <div id="zoomInDown1" class="modal modal-edu-general modal-zoomInDown fade"

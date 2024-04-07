@@ -288,215 +288,217 @@
         </div>
         <br>
         <div class="analytics-sparkle-area">
-                        <div class="container-fluid">
-                            <div class="row">
-                                {{-- Chart --}}
-                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                                    <div class="analytics-sparkle-line reso-mg-b-30">
-                                        <div class="analytics-content">
-                                            <h5>Number of Contrbutions within
-                                                {{-- <span>({{ $faculty->name }})</span> --}}
-                                                for
-                                                each academic
-                                                year
-                                            </h5>
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <br>
+            <div class="container-fluid">
+                <div class="row">
+                    {{-- Chart --}}
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                        <div class="analytics-sparkle-line reso-mg-b-30">
+                            <div class="analytics-content">
+                                <h5>Number of Contrbutions within
+                                    {{-- <span>({{ $faculty->name }})</span> --}}
+                                    for
+                                    each academic
+                                    year
+                                </h5>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
 
-                                            <!-- <div id="line2-chart">
+                                <!-- <div id="line2-chart">
                                                 <canvas id="barchart1"></canvas>
                                             </div> -->
 
-                                            <div id="bar-chart">
-                                                <small></small>
-                                                <canvas id="barchart"></canvas>
-                                            </div>
-
-                                            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                                            <script>
-                                                document.addEventListener("DOMContentLoaded", function() {
-                                                    var ctx = document.getElementById("barchart").getContext('2d');
-                                                    var customBarChart = new Chart(ctx, {
-                                                        type: 'bar',
-                                                        data: {
-                                                            labels: ["2020", "2021", "2022", "2023", "2024"],
-                                                            datasets: [{
-                                                                label: "Each Academic Year",
-                                                                data: [23, 30, 25, 27, 24],
-                                                                backgroundColor: [
-                                                                    'rgba(255, 99, 132, 0.2)',
-                                                                    'rgba(54, 162, 235, 0.2)',
-                                                                    'rgba(255, 206, 86, 0.2)',
-                                                                    'rgba(75, 192, 192, 0.2)',
-                                                                    'rgba(153, 102, 255, 0.2)',
-                                                                ],
-                                                                borderColor: [
-                                                                    'rgba(255, 99, 132, 1)',
-                                                                    'rgba(54, 162, 235, 1)',
-                                                                    'rgba(255, 206, 86, 1)',
-                                                                    'rgba(75, 192, 192, 1)',
-                                                                    'rgba(153, 102, 255, 1)',
-                                                                ],
-                                                                borderWidth: 1
-                                                            }]
-                                                        }
-                                                    });
-                                                });
-                                            </script>
-
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <br>
-                                        </div>
-                                    </div>
+                                <div id="bar-chart">
+                                    <small></small>
+                                    <canvas id="barchart"></canvas>
                                 </div>
 
+                                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                        var ctx = document.getElementById("barchart").getContext('2d');
+                                        var customBarChart = new Chart(ctx, {
+                                            type: 'bar',
+                                            data: {
+                                                labels: ["2020", "2021", "2022", "2023", "2024"],
+                                                datasets: [{
+                                                    label: "Each Academic Year",
+                                                    data: [23, 30, 25, 27, 24],
+                                                    backgroundColor: [
+                                                        'rgba(255, 99, 132, 0.2)',
+                                                        'rgba(54, 162, 235, 0.2)',
+                                                        'rgba(255, 206, 86, 0.2)',
+                                                        'rgba(75, 192, 192, 0.2)',
+                                                        'rgba(153, 102, 255, 0.2)',
+                                                    ],
+                                                    borderColor: [
+                                                        'rgba(255, 99, 132, 1)',
+                                                        'rgba(54, 162, 235, 1)',
+                                                        'rgba(255, 206, 86, 1)',
+                                                        'rgba(75, 192, 192, 1)',
+                                                        'rgba(153, 102, 255, 1)',
+                                                    ],
+                                                    borderWidth: 1
+                                                }]
+                                            }
+                                        });
+                                    });
+                                </script>
 
-                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                                    <div class="analytics-sparkle-line reso-mg-b-30">
-                                        <div class="analytics-content">
-                                            <h5>Percentage of Contributions within
-                                                {{-- <span>({{ $faculty->name }})</span> --}}
-
-                                                for each
-                                                academic
-                                                year
-                                            </h5>
-
-
-                                            <div id="pie-chart">
-                                                <small></small>
-                                                <canvas id="piechart"></canvas>
-                                            </div>
-                                            <script>
-                                                document.addEventListener("DOMContentLoaded", function() {
-                                                    var ctx = document.getElementById("piechart").getContext('2d');
-                                                    var customPieChart = new Chart(ctx, {
-                                                        type: 'pie', // Change this to 'doughnut' if you prefer a doughnut chart.
-                                                        data: {
-                                                            labels: ["Engineering", "Arts and Sciences", "Information Technology", "Education", "Social Sciences", "Business Administration"],
-                                                            datasets: [{
-                                                                data: [10, 21, 7, 9, 11, 13], // Add new data points here
-                                                                backgroundColor: [
-                                                                    'rgba(255, 99, 132, 0.2)',
-                                                                    'rgba(54, 162, 235, 0.2)',
-                                                                    'rgba(255, 206, 86, 0.2)',
-                                                                    'rgba(75, 192, 192, 0.2)',
-                                                                    'rgba(153, 102, 255, 0.2)',
-                                                                    'rgba(255, 159, 64, 0.2)',
-                                                                    'rgba(75, 192, 192, 0.2)',
-                                                                    'rgba(255, 99, 132, 0.2)',
-                                                                    'rgba(54, 162, 235, 0.2)',
-                                                                    'rgba(255, 206, 86, 0.2)',
-                                                                ],
-                                                                borderColor: [
-                                                                    'rgba(255,99,132,1)',
-                                                                    'rgba(54, 162, 235, 1)',
-                                                                    'rgba(255, 206, 86, 1)',
-                                                                    'rgba(75, 192, 192, 1)',
-                                                                    'rgba(153, 102, 255, 1)',
-                                                                    'rgba(255, 159, 64, 1)',
-                                                                    'rgba(75, 192, 192, 1)',
-                                                                    'rgba(255,99,132,1)',
-                                                                    'rgba(54, 162, 235, 1)',
-                                                                    'rgba(255, 206, 86, 1)',
-                                                                ],
-                                                                borderWidth: 1
-                                                            }]
-                                                        },
-                                                        options: {
-                                                            responsive: true,
-                                                            legend: {
-                                                                position: 'top',
-                                                            },
-                                                            animation: {
-                                                                animateScale: true,
-                                                                animateRotate: true
-                                                            }
-                                                        }
-                                                    });
-                                                });
-                                            </script>
-                                            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                                    <div class="analytics-sparkle-line reso-mg-b-30">
-                                        <div class="analytics-content">
-                                            <h5>
-                                                <br>
-                                                Number of contributors within
-                                                {{-- <span>({{ $faculty->name }})</span> --}}
-                                                for
-                                                each academic
-                                                year
-                                            </h5>
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <div id="bar-chart">
-                                                <small></small>
-                                                <canvas id="barchart2"></canvas>
-                                            </div>
-
-                                            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                                            <script>
-                                                document.addEventListener("DOMContentLoaded", function() {
-                                                    var ctx = document.getElementById("barchart2").getContext('2d');
-                                                    var customBarChart = new Chart(ctx, {
-                                                        type: 'bar',
-                                                        data: {
-                                                            labels: ["2020", "2021", "2022", "2023", "2024"],
-                                                            datasets: [{
-                                                                label: "Each Academic Year",
-                                                                data: [10, 17, 10, 9, 12],
-                                                                backgroundColor: [
-                                                                    'rgba(255, 99, 132, 0.2)',
-                                                                    'rgba(54, 162, 235, 0.2)',
-                                                                    'rgba(255, 206, 86, 0.2)',
-                                                                    'rgba(75, 192, 192, 0.2)',
-                                                                    'rgba(153, 102, 255, 0.2)',
-                                                                ],
-                                                                borderColor: [
-                                                                    'rgba(255, 99, 132, 1)',
-                                                                    'rgba(54, 162, 235, 1)',
-                                                                    'rgba(255, 206, 86, 1)',
-                                                                    'rgba(75, 192, 192, 1)',
-                                                                    'rgba(153, 102, 255, 1)',
-                                                                ],
-                                                                borderWidth: 1
-                                                            }]
-                                                        },
-                                                        options: {
-                                                            responsive: true,
-                                                            legend: {
-                                                                position: 'top',
-                                                            },
-                                                            animation: {
-                                                                animateScale: true,
-                                                                animateRotate: true
-                                                            }
-                                                        }
-                                                    });
-                                                });
-                                            </script>
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <br>
-                                        </div>
-                                    </div>
-                                </div>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
                             </div>
                         </div>
                     </div>
+
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                        <div class="analytics-sparkle-line reso-mg-b-30">
+                            <div class="analytics-content">
+                                <h5>Percentage of Contributions within
+                                    {{-- <span>({{ $faculty->name }})</span> --}}
+
+                                    for each
+                                    academic
+                                    year
+                                </h5>
+
+
+                                <div id="pie-chart">
+                                    <small></small>
+                                    <canvas id="piechart"></canvas>
+                                </div>
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                        var ctx = document.getElementById("piechart").getContext('2d');
+                                        var customPieChart = new Chart(ctx, {
+                                            type: 'pie', // Change this to 'doughnut' if you prefer a doughnut chart.
+                                            data: {
+                                                labels: ["Engineering", "Arts and Sciences", "Information Technology", "Education",
+                                                    "Social Sciences", "Business Administration"
+                                                ],
+                                                datasets: [{
+                                                    data: [10, 21, 7, 9, 11, 13], // Add new data points here
+                                                    backgroundColor: [
+                                                        'rgba(255, 99, 132, 0.2)',
+                                                        'rgba(54, 162, 235, 0.2)',
+                                                        'rgba(255, 206, 86, 0.2)',
+                                                        'rgba(75, 192, 192, 0.2)',
+                                                        'rgba(153, 102, 255, 0.2)',
+                                                        'rgba(255, 159, 64, 0.2)',
+                                                        'rgba(75, 192, 192, 0.2)',
+                                                        'rgba(255, 99, 132, 0.2)',
+                                                        'rgba(54, 162, 235, 0.2)',
+                                                        'rgba(255, 206, 86, 0.2)',
+                                                    ],
+                                                    borderColor: [
+                                                        'rgba(255,99,132,1)',
+                                                        'rgba(54, 162, 235, 1)',
+                                                        'rgba(255, 206, 86, 1)',
+                                                        'rgba(75, 192, 192, 1)',
+                                                        'rgba(153, 102, 255, 1)',
+                                                        'rgba(255, 159, 64, 1)',
+                                                        'rgba(75, 192, 192, 1)',
+                                                        'rgba(255,99,132,1)',
+                                                        'rgba(54, 162, 235, 1)',
+                                                        'rgba(255, 206, 86, 1)',
+                                                    ],
+                                                    borderWidth: 1
+                                                }]
+                                            },
+                                            options: {
+                                                responsive: true,
+                                                legend: {
+                                                    position: 'top',
+                                                },
+                                                animation: {
+                                                    animateScale: true,
+                                                    animateRotate: true
+                                                }
+                                            }
+                                        });
+                                    });
+                                </script>
+                                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                        <div class="analytics-sparkle-line reso-mg-b-30">
+                            <div class="analytics-content">
+                                <h5>
+                                    <br>
+                                    Number of contributors within
+                                    {{-- <span>({{ $faculty->name }})</span> --}}
+                                    for
+                                    each academic
+                                    year
+                                </h5>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <div id="bar-chart">
+                                    <small></small>
+                                    <canvas id="barchart2"></canvas>
+                                </div>
+
+                                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", function() {
+                                        var ctx = document.getElementById("barchart2").getContext('2d');
+                                        var customBarChart = new Chart(ctx, {
+                                            type: 'bar',
+                                            data: {
+                                                labels: ["2020", "2021", "2022", "2023", "2024"],
+                                                datasets: [{
+                                                    label: "Each Academic Year",
+                                                    data: [10, 17, 10, 9, 12],
+                                                    backgroundColor: [
+                                                        'rgba(255, 99, 132, 0.2)',
+                                                        'rgba(54, 162, 235, 0.2)',
+                                                        'rgba(255, 206, 86, 0.2)',
+                                                        'rgba(75, 192, 192, 0.2)',
+                                                        'rgba(153, 102, 255, 0.2)',
+                                                    ],
+                                                    borderColor: [
+                                                        'rgba(255, 99, 132, 1)',
+                                                        'rgba(54, 162, 235, 1)',
+                                                        'rgba(255, 206, 86, 1)',
+                                                        'rgba(75, 192, 192, 1)',
+                                                        'rgba(153, 102, 255, 1)',
+                                                    ],
+                                                    borderWidth: 1
+                                                }]
+                                            },
+                                            options: {
+                                                responsive: true,
+                                                legend: {
+                                                    position: 'top',
+                                                },
+                                                animation: {
+                                                    animateScale: true,
+                                                    animateRotate: true
+                                                }
+                                            }
+                                        });
+                                    });
+                                </script>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="container-fluid">
             <div class="data-table-area mg-b-15">
 
@@ -547,20 +549,22 @@
                                                                     class="btn-custon-rounded btn-primary btn-xs"
                                                                     style="color: white; font-size: 16px;"><i
                                                                         class="fa fa-info-circle edu-informatio"></i>See
-                                                                    more</button></a> |
+                                                                    more</button></a>
 
-                                                            <a href="/magazine/{{ $magazine->id }}/destroy">
-                                                                <method="POST">
-                                                                    @csrf
-                                                                    @method('DELETE')
+                                                            <form action="/magazine/{{ $magazine->id }}/destroy"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
 
-                                                                    <button type="submit"
-                                                                        class="btn-custon-rounded btn-danger btn-xs"
-                                                                        style="color: white; font-size: 16px;"><i
-                                                                            class="fa fa-trash-o"
-                                                                            style="font-size:16px"></i>Delete
-                                                                    </button>
-                                                            </a>
+                                                                <button type="submit"
+                                                                    class="btn-custon-rounded btn-danger btn-xs"
+                                                                    style="color: white; font-size: 16px;"><i
+                                                                        class="fa fa-trash-o"
+                                                                        style="font-size:16px"></i>Delete
+                                                                </button>
+
+                                                            </form>
+
 
                                                         </td>
                                                     </tr>

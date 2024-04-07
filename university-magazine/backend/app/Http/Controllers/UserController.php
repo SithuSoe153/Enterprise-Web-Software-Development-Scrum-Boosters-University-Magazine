@@ -17,6 +17,7 @@ class UserController extends Controller
 {
     public function register(Request $request)
     {
+
         // Validate the incoming request data
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -51,7 +52,7 @@ class UserController extends Controller
         ]);
 
         // Redirect or return response after successful registration
-        return redirect('dashboard')->with('success', 'Registration successful!');
+        return redirect('/login')->with('success', 'Registration successful!');
     }
 
 
@@ -125,7 +126,7 @@ class UserController extends Controller
             'password' => 'nullable|string|min:8',
         ]);
 
-        dd($request->all());
+        // dd($request->all());
 
         $user = auth()->user();
 

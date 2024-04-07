@@ -11,6 +11,9 @@ class MagazineController extends Controller
 
     public function destroyMagazine(Magazine $magazine)
     {
+        if ($magazine->id == 2) {
+            return redirect('/dashboard')->with('success', 'You cannot delete this magazine!');
+        }
         // Delete the magazine
         $magazine->delete();
 

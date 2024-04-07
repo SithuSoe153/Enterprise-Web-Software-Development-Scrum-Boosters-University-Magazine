@@ -67,6 +67,15 @@
  <![endif]-->
     <div class="error-pagewrap">
         <div class="error-page-int">
+
+            @if (session()->has('success'))
+                {{-- <br> --}}
+                <div class="alert alert-success text-center" role="alert">
+                    {{ session('success') }}
+                </div>
+                <br>
+            @endif
+
             <div class="text-center m-b-md custom-login">
                 <h3>PLEASE LOGIN TO APP</h3>
                 <p>Welcome to Scrum Boosters!</p>

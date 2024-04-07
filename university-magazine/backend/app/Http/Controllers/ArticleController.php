@@ -377,11 +377,11 @@ class ArticleController extends Controller
             $zip->close();
 
 
-
+            // dd($zipPath);
             // Check if the file exists
-            if (!Storage::exists($zipPath)) {
-                return redirect()->back()->with('success', 'Sorry! There are no published articles for this year available for download yet.');
-            }
+            // if (!Storage::exists($zipPath)) {
+            //     return redirect()->back()->with('success', 'Sorry! There are no published articles for this year available for download yet.');
+            // }
 
 
             // Download ZIP

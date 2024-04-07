@@ -130,6 +130,7 @@ Route::middleware('auth-user')->group(function () {
 });
 
 
+Route::post('/submit-form/guest', [UserController::class, 'register']);
 Route::get('/login', [AuthController::class, 'login']);
 Route::post('/login', [AuthController::class, 'apiLogin']);
 Route::get('/register', [AuthController::class, 'create']);
