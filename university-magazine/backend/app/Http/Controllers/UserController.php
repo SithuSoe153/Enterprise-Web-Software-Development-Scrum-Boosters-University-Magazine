@@ -126,7 +126,6 @@ class UserController extends Controller
             'password' => 'nullable|string|min:8',
         ]);
 
-        // dd($request->all());
 
         $user = auth()->user();
 
