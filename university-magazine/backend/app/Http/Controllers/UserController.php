@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\RegisterMail;
 use App\Models\Article;
 use App\Models\AssignedRole;
 use App\Models\Comment;
@@ -9,6 +10,7 @@ use App\Models\Faculty;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -27,13 +29,6 @@ class UserController extends Controller
             'role' => 'required|numeric', // Assuming 'role' is a numeric ID, adjust validation as needed
         ]);
 
-
-        // if ($validator->fails()) {
-        //     return redirect()->back()
-        //     ->withErrors($validator)
-        //     ->withInput();
-        // }
-
         // Proceed with user creation if validation passes
         $user = User::create([
             'name' => $request->name,
@@ -48,8 +43,31 @@ class UserController extends Controller
             'user_id' => $user->id,
             'role_id' => $request->role,
             'faculty_id' => $request->faculty_id,
-            // Optionally, handle start_time and end_time if needed
         ]);
+
+
+        // Find the Marketing Coordinator of the specified faculty
+        $marketingCoordinator = AssignedRole::where('faculty_id', $request->faculty_id)
+            ->where('role_id', 2) // Assuming 2 represents the Marketing Coordinator role
+            ->first();
+        $facultyName = Faculty::find($request->faculty_id)->name;
+
+        if ($marketingCoordinator) {
+            // Retrieve the email address of the Marketing Coordinator
+            $coordinatorEmail = User::find($marketingCoordinator->user_id)->email;
+            $coordinatorName = User::find($marketingCoordinator->user_id)->name;
+
+            // Send email with necessary details of the new user
+            try {
+                Mail::to($coordinatorEmail)
+                    ->queue(new RegisterMail($user, $facultyName, $coordinatorName));
+            } catch (\Throwable $th) {
+                return response()->json(['success' => 'Account Creation Not Successful']);
+            }
+        }
+
+
+
 
         // Redirect or return response after successful registration
         return redirect('/login')->with('success', 'Registration successful!');

@@ -100,7 +100,7 @@ class AuthController extends Controller
                 $query->where('faculty_id', $facultyId);
             })->get();
 
-            // see guest
+            // List of guests
             $guests = User::whereHas('roles', function ($query) use ($facultyId) {
                 $query->where('name', 'Guest');
             })->whereHas('assignedRoles', function ($query) use ($facultyId) {

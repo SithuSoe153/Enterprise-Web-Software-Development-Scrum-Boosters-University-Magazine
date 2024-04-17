@@ -6,13 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
 
-    protected $fillable = ['title']; // Remove 'user_id' from here
-
-
+    protected $fillable = ['title'];
 
     public function up(): void
     {
@@ -20,10 +15,9 @@ return new class extends Migration
             $table->id(); // article_id
             $table->foreignId('magazine_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            // $table->unsignedBigInteger('user_id');
             $table->string('title');
             $table->text('description')->nullable();
-            $table->boolean('is_selected')->default(false);          // Assuming 0 is the default status
+            $table->boolean('is_selected')->default(false); // Assuming 0 is the default status
             $table->text('remarks')->nullable();
             $table->timestamps();
         });

@@ -166,7 +166,7 @@
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label for="">Submissio Date</label>
+                                                            <label for="">Submission Date</label>
                                                             <div class="form-group">
                                                                 <link rel="stylesheet"
                                                                     href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -215,7 +215,7 @@
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label for="">Submissio Final Closure Date</label>
+                                                            <label for="">SubmissionFinal Closure Date</label>
                                                             <div class="form-group">
                                                                 <link rel="stylesheet"
                                                                     href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">

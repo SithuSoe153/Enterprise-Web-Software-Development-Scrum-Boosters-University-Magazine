@@ -151,7 +151,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label for="">Submissio Date</label>
+                                                            <label for="">Submission Date</label>
                                                             <div class="form-group">
                                                                 <input type="text" class="form-control"
                                                                     value="{{ $article->created_at->format('d M Y') }}"

@@ -107,9 +107,10 @@
 
                                                 <li class="nav-item">
                                                     <a href="#" role="button" class="nav-link dropdown-toggle">
-                                                        <img src="img/product/pro4.jpg" alt="" />
-                                                        <span class="admin-name">Welcome Coordinator Name</span>
-                                                        <img src="../img/notification/1.jpg" alt="">
+                                                        <span class="admin-name">Welcome
+                                                            {{ auth()->user()->name }}</span>
+                                                        <img src="{{ asset('storage/' . auth()->user()->profile) }}"
+                                                            alt="">
 
                                                     </a>
                                                 </li>

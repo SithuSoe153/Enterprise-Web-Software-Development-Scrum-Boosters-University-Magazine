@@ -132,9 +132,6 @@ class ArticleController extends Controller
 
     public function upload(Request $request)
     {
-
-        // dd($request->all());
-
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
@@ -144,7 +141,6 @@ class ArticleController extends Controller
         ]);
 
 
-        // Assuming you're manually managing the user authentication for now
         $user = auth()->user();
 
         // Create a unique directory for this specific article upload
@@ -159,7 +155,6 @@ class ArticleController extends Controller
             'magazine_id' => 2,
             'title' => $request->title,
             'description' => $request->description,
-            // Include other fields as necessary
         ]);
 
         // Store article files (Word documents)

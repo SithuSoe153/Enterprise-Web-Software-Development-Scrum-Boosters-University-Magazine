@@ -1,7 +1,7 @@
 <div class="left-sidebar-pro">
     <nav id="sidebar" class="">
         <div class="sidebar-header">
-            <a href="index.php"><img class="main-logo" src="../img/scrumlogo.png" width="200px" alt="" /></a>
+            <a href="index.php"><img class="main-logo" src="../../img/scrumlogo.png" width="200px" alt="" /></a>
         </div>
         <div class="left-custom-menu-adp-wrap comment-scrollbar">
             <nav class="sidebar-nav left-sidebar-menu-pro">

@@ -150,7 +150,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label for="">Submissio Date</label>
+                                                            <label for="">Submission Date</label>
                                                             <div class="form-group">
 
                                                                 <input class="form-control" type="text"
