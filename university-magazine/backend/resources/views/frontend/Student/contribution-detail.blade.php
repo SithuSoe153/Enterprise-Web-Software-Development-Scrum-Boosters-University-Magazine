@@ -85,7 +85,7 @@
 
     @php
         use App\Models\Magazine;
-        $cd = Magazine::latest()->get()->first()->closure_date;
+        $cd = Magazine::latest()->get()->first()->finalclosure_date;
 
     @endphp
 
@@ -263,8 +263,24 @@
                                         <div class="login-horizental cancel-wp pull-left form-bc-ele col-lg-12">
                                             <div class="button-ap-list responsive-btn">
                                                 <div class="button-style-four btn-mg-b-10">
-                                                    <a href="/article/{{ $article->id }}/edit"><button type="button"
-                                                            class="col-lg-2 btn btn-custon-rounded-four btn-primary btn-spacing">Edit</button></a>
+
+                                                    @php
+
+                                                        $closureDate = App\Models\Magazine::where(
+                                                            'id',
+                                                            $article->magazine_id,
+                                                        )->first()->finalclosure_date;
+
+                                                    @endphp
+
+
+                                                    @if ($closureDate && now()->lt($closureDate))
+                                                        <a href="/article/{{ $article->id }}/edit"><button
+                                                                type="button"
+                                                                class="col-lg-2 btn btn-custon-rounded-four btn-primary btn-spacing">Edit</button></a>
+                                                    @endif
+
+
                                                     {{-- <a href="/download-articles?article={{ $article->id }}"><button --}}
                                                     <a href="/download-articles"><button type="button"
                                                             class="col-lg-2 btn btn-custon-rounded-four btn-primary btn-spacing">Download</button></a>

@@ -197,7 +197,7 @@
                     use App\Models\User;
 
                     use App\Models\Magazine;
-                    $cd = Magazine::latest()->get()->first()->closure_date;
+                    $cd = Magazine::latest()->get()->first()->finalclosure_date;
 
                     $allcontributions = Article::all()->count();
 

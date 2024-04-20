@@ -154,8 +154,7 @@
                                 <div class="row">
                                     <div class="col-lg-12 text-center">
                                         <div class="text-center modal-bootstrap modal-login-form">
-                                            <a class="zoomInDown mg-t text-center" href="/login" data-toggle="modal"
-                                                data-target="#zoomInDown1">Please Sign In</a>
+                                            <a class="zoomInDown mg-t text-center" href="/login">Please Sign In</a>
                                         </div>
                                         <div id="zoomInDown1" class="modal modal-edu-general modal-zoomInDown fade"
                                             role="dialog">

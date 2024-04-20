@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
-            'password' => bcrypt('kmd123'),
+            'password' => bcrypt('Passwordkmd123'),
             'profile' => '../img/default.jpg'
         ])->roles()->attach(Role::where('name', 'Admin')->first()->id);
 
@@ -42,18 +42,18 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Marketing Manager',
             'email' => 'mm@gmail.com',
-            'password' => bcrypt('kmd123'),
+            'password' => bcrypt('Passwordkmd123'),
             'profile' => '../img/default.jpg'
 
         ])->roles()->attach(Role::where('name', 'Marketing Manager')->first()->id);
 
-        // Marketing Managers for each faculty
+        // Marketing Coordinators for each faculty
         foreach ($faculties as $facultyName) {
             $email = 'mc' . str_replace(' ', '', $facultyName) . '@gmail.com';
             $user = User::create([
                 'name' => 'Marketing Coordinator ' . $facultyName,
                 'email' => $email,
-                'password' => bcrypt('kmd123'),
+                'password' => bcrypt('Passwordkmd123'),
                 'profile' => '../img/default.jpg'
 
             ]);
@@ -72,7 +72,7 @@ class DatabaseSeeder extends Seeder
                 $user = User::create([
                     'name' => 'Student',
                     'email' => $email,
-                    'password' => bcrypt('kmd123'),
+                    'password' => bcrypt('Passwordkmd123'),
                     'profile' => '../img/default.jpg'
 
                 ]);
@@ -87,7 +87,7 @@ class DatabaseSeeder extends Seeder
             $user = User::create([
                 'name' => 'Guest',
                 'email' => $email,
-                'password' => bcrypt('kmd123'),
+                'password' => bcrypt('Passwordkmd123'),
                 'profile' => '../img/default.jpg'
 
             ]);

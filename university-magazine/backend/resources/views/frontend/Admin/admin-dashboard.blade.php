@@ -184,8 +184,11 @@
 
                                 @foreach ($mostActiveUsers as $user)
                                     @php
-                                        $maxVisits = $mostActiveUsers->max('visit_count'); // Get the maximum visit count among all users
-                                        $widthPercentage = ($user->visit_count / $maxVisits) * 100; // Calculate width percentage
+                                        // Get the maximum visit count among all users
+                                        $maxVisits = $mostActiveUsers->max('visit_count');
+
+                                        // Calculate width percentage
+                                        $widthPercentage = ($user->visit_count / $maxVisits) * 100;
                                     @endphp
 
                                     {{-- {{ $user->visit_count }}, --}}
@@ -262,7 +265,7 @@
 
                                 @foreach ($mostUsedBrowsers as $browser)
                                     @php
-                                        $widthPercentage = rand(80, 100);
+                                        $widthPercentage = rand(40, 100);
                                     @endphp
 
                                     @if ($browser->browser != '')

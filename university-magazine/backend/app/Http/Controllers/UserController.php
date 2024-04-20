@@ -29,6 +29,10 @@ class UserController extends Controller
             'role' => 'required|numeric', // Assuming 'role' is a numeric ID, adjust validation as needed
         ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         // Proceed with user creation if validation passes
         $user = User::create([
             'name' => $request->name,

@@ -136,7 +136,7 @@ class ArticleController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'articles.*' => 'nullable|mimes:doc,docx',
-            'images.*' => 'nullable|mimes:jpg,jpeg,png|max:2048', // Adjust the size as needed
+            'images.*' => 'nullable|mimes:jpg,jpeg,png|max:2048',
             'terms' => 'accepted' // Validation rule for the Terms checkbox
         ]);
 
